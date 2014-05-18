@@ -72,5 +72,34 @@ Returns the module map metadata for a given app brbanch and route.
 Returns all routes supported by all registered apps and versions.
 
 
+## Grunt Tasks
 
+### hapi-routes
+
+Generates the module-map file utilized by `resourceLoader` to track the routes supported by a given application.
+
+```javascript
+  grunt.initConfig({
+    'hapi-routes': {
+      map: {
+        options: {
+          package: 'web',
+          dest: buildDir + '/module-map.json'
+        }
+      },
+      release: {
+        options: {
+          package: 'web',
+          dest: 'build/' + releasePrefix + '/module-map.json'
+        }
+      }
+    }
+  });
+
+  grunt.loadNpmTasks('hula-hoop');
+```
+
+Note that using this task requires that [lumbar][] be installed as a sibling of hula-hoops at build time. Any arguments passed in the options field will be forwarded to the lumbar constructor, allowing for plugins and libraries to be specified.
+
+[lumbar]: https://github.com/walmartlabs/lumbar
 [lumbar-long-expires]: https://github.com/walmartlabs/lumbar-long-expires
