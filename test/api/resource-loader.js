@@ -1,11 +1,10 @@
 var fs = require('fs'),
     path = require('path'),
-    resourceLoader = require('../../lib/api/resource-loader'),
-    sinon = require('sinon');
+    resourceLoader = require('../../lib/api/resource-loader');
 
 describe('resource-loader', function() {
   beforeEach(function() {
-    sinon.stub(fs, 'readdirSync', function(name) {
+    this.stub(fs, 'readdirSync', function(name) {
       if (/bazbaz$/.test(name)) {
         return [
           'baz',
@@ -38,7 +37,6 @@ describe('resource-loader', function() {
     });
   });
   afterEach(function() {
-    fs.readdirSync.restore();
     resourceLoader.reset();
   });
 
@@ -55,7 +53,7 @@ describe('resource-loader', function() {
 
   describe('#info', function() {
     beforeEach(function() {
-      sinon.stub(fs, 'readFileSync', function(name) {
+      this.stub(fs, 'readFileSync', function(name) {
         // Mock out module-map.json files
         if (/\/VERSION/.test(name)) {
           return 'custom blerg: ' + name;
@@ -63,9 +61,6 @@ describe('resource-loader', function() {
           throw new Error('should not read');
         }
       });
-    });
-    afterEach(function() {
-      fs.readFileSync.restore();
     });
     it('should return a list of resources', function(done) {
       resourceLoader.register('appName!', [
@@ -96,7 +91,7 @@ describe('resource-loader', function() {
 
   describe('route info', function() {
     beforeEach(function() {
-      sinon.stub(fs, 'readFileSync', function(name) {
+      this.stub(fs, 'readFileSync', function(name) {
         // Mock out module-map.json files
         if (/\/baz\//.test(name)) {
           return JSON.stringify([
@@ -124,13 +119,9 @@ describe('resource-loader', function() {
           });
         }
       });
-      sinon.stub(fs, 'existsSync', function(name) {
+      this.stub(fs, 'existsSync', function(name) {
         return true;
       });
-    });
-    afterEach(function() {
-      fs.readFileSync.restore();
-      fs.existsSync.restore();
     });
     describe('#routes', function() {
       it('should load routes', function() {
