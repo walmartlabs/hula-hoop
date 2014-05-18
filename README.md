@@ -1,11 +1,15 @@
 # Hula-Hoop
 
-Server-side rendering components for Thorax + Hapi stacks.
+Server-side rendering components for Lumbar + Thorax + Hapi stacks.
 
 Provides common endpoints and libraries implementing:
 
 - Application resource loading and serving
 - Conditional branch loading
+
+## Server vs. Client Side Rendering
+
+Hula-hoop is able to conditionally return either server rendered HTML content or a simplified page suitable for complete client-side rendering. This optimizes the use of Fruit Loops page instances to the cases that are going to benefit and allows allows for rendering failover, should errors occur in supported server side cases.
 
 ## Resources and Branches
 
@@ -14,6 +18,16 @@ Hula-hoop maintains a list of all resources that are involved with running a giv
 Additionally, it can serve multiple versions of an application on the same endpoint in support of application-level AB testing or staged deploys. This is done by swapping the served index files through the `resourceLoader.index` API.
 
 ## API
+
+### endpoints.clientSide(app, options)
+
+Renders the index for a given `app` in a manner suitable for client side rendering. If a config is generated for the user, this will be inlined in the response.
+
+`options`:
+- `configVar`: Required JavaScript identifier that will receive the inlined config. This may be any valid, assignable JavaScript construct. Ex: `var foo`, `Foo.bar`.
+- `userConfig(req)`: Used to generate the configuration for a given request. The return value's `branch` field will be used to select the resource branch to render.
+- `finalize(req, response)`: Allows arbitrary modification of `response` prior to successful return. This can be used to attach state or custom headers to the response, etc.
+- `heartbeat`: Truthy to enable simplified success only response
 
 ### api.resourceLoader
 
