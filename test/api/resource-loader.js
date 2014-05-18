@@ -6,7 +6,12 @@ var fs = require('fs'),
 describe('resource-loader', function() {
   beforeEach(function() {
     sinon.stub(fs, 'readdirSync', function(name) {
-      if (/baz$/.test(name)) {
+      if (/bazbaz$/.test(name)) {
+        return [
+          'baz',
+          'VERSION'
+        ];
+      } else if (/baz$/.test(name)) {
         return [
           'index.html',
           'bat',
@@ -53,7 +58,7 @@ describe('resource-loader', function() {
       sinon.stub(fs, 'readFileSync', function(name) {
         // Mock out module-map.json files
         if (/\/VERSION/.test(name)) {
-          return 'custom blerg';
+          return 'custom blerg: ' + name;
         } else {
           throw new Error('should not read');
         }
@@ -64,7 +69,7 @@ describe('resource-loader', function() {
     });
     it('should return a list of resources', function(done) {
       resourceLoader.register('appName!', [
-        {name: 'foo', version: '1.0.0', path: 'baz'},
+        {name: 'foo', version: '1.0.0', path: 'bazbaz'},
         {name: 'bar', version: '2.0.0', path: 'bat'}
       ]);
 
@@ -77,7 +82,7 @@ describe('resource-loader', function() {
               name: 'bar'
             },
             {
-              info: 'custom blerg',
+              info: 'custom blerg: ' + process.cwd() + '/bazbaz/VERSION',
               name: 'foo'
             }
           ]
@@ -261,6 +266,15 @@ describe('resource-loader', function() {
       resourceLoader.register('appName!', [
         {name: 'foo-bar', version: '1.0.0', path: 'baz'},
         {name: 'bar-baz', version: '2.0.0', path: 'bat'}
+      ]);
+      expect(resourceLoader.index('appName!', 'foo-bar')).to.match(/baz\/index.html$/);
+      expect(resourceLoader.index('appName!', 'bar-baz')).to.match(/bat\/index.html$/);
+      expect(resourceLoader.index('appName!')).to.match(/bat\/index.html$/);
+
+      resourceLoader.reset();
+      resourceLoader.register('appName!', [
+        {name: 'bar-baz', version: '2.0.0', path: 'bat'},
+        {name: 'foo-bar', version: '1.0.0', path: 'baz'}
       ]);
       expect(resourceLoader.index('appName!', 'foo-bar')).to.match(/baz\/index.html$/);
       expect(resourceLoader.index('appName!', 'bar-baz')).to.match(/bat\/index.html$/);
