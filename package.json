@@ -1,0 +1,28 @@
+{
+  "name": "hula-hoop",
+  "description": "Thorax server-side Hapi components",
+  "version": "0.0.0",
+  "authors": [
+    "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)"
+  ],
+  "main": "index",
+  "engines": {
+    "node": ">=0.10.6"
+  },
+  "dependencies": {
+    "fruit-loops": "0.x.x",
+    "semver": "2.x.x",
+    "underscore": "1.x.x"
+  },
+  "devDependencies": {
+    "chai": "1.x.x",
+    "hapi": "4.x.x",
+    "istanbul": "0.2.x",
+    "mocha": "1.x.x",
+    "sinon": "1.x.x",
+    "sinon-chai": "^2.5.0"
+  },
+  "scripts": {
+    "test": "make ist"
+  }
+}
