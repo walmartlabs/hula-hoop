@@ -45,6 +45,31 @@ describe('endpoints#page', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
+    var finalized;
+    pageOptions.finalize = function(req, response, isServer) {
+      expect(isServer).to.be.true;
+      finalized = true;
+    };
+
+    server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.page('app', pageOptions)} });
+    server.inject({
+      method: 'get',
+      url: '/foo/bar/bat',
+      payload: ''
+    }, function(res) {
+      expect(finalized).to.be.true;
+      expect(res.payload).to.match(/\$serverCache/);
+      expect(res.payload).to.match(/<div id="output">(\nit ran){3}/);
+
+      done();
+    });
+  });
+
+  it('should route to server side', function(done) {
+    this.stub(resourceLoader, 'asset', function(path) {
+      return __dirname + '/../artifacts/server-side.js.test';
+    });
+
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.page('app', pageOptions)} });
     server.inject({
       method: 'get',
@@ -85,6 +110,12 @@ describe('endpoints#page', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
+    var finalized;
+    pageOptions.finalize = function(req, response, isServer) {
+      expect(isServer).to.be.false;
+      finalized = true;
+    };
+
     options = {
       serverRoute: {
         '/foo/{path*}': false
@@ -97,6 +128,7 @@ describe('endpoints#page', function() {
       url: '/foo/bar/bat',
       payload: ''
     }, function(res) {
+      expect(finalized).to.be.true;
       expect(res.payload).to.not.match(/\$serverCache/);
 
       done();

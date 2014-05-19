@@ -23,7 +23,7 @@ var pageHandler = HulaHoop.endpoints.page(name, {
 });
 
 server.route(
-  api.resourceLoader.routes().map(function(route) {
+  HulaHoop.api.resourceLoader.routes().map(function(route) {
     return {
       path: route,
       method: 'GET',
@@ -79,6 +79,10 @@ Conditionally renders the requests using client-side or server-side rendering ba
 Should an error occur while rendering the server-side page, the response will failover to the client-side rendering after logging the response.
 
 `options` is the combined list of options for both the `endpoints.serverSide` and `endpoints.clientSide` handlers discussed below.
+
+One distinction is that `finalize` is passed an additional parameter specifying whether or not server side rendering was used to generate the final response. `finalize(req, response, wasServerSide)`
+
+On caching, this endpoint will emit custom cache headers if server-side rendering is utilized, based on the resultant cache calculated from the AJAX requests made during the page's execution cycle. Any cache values defined on the hapi route definition will be utilized for the client-side response only.
 
 ### endpoints.serverSide(options)
 
