@@ -49,10 +49,7 @@ describe('endpoints#serverSide', function() {
       pageOptions = {
         cacheResources: true,
         poolSize: 5,
-        host: 'localhost:' + server.info.port,
-        pageConfig: function(req) {
-          return options;
-        }
+        host: 'localhost:' + server.info.port
       };
 
       done();

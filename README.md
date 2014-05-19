@@ -4,12 +4,16 @@ Server-side rendering components for Lumbar + Thorax + Hapi stacks.
 
 Provides common endpoints and libraries implementing:
 
+- Route-based Fruit-loops server-side rendering
+- Automatic fail over to client-side rendering
 - Application resource loading and serving
 - Conditional branch loading
 
 ## Server vs. Client Side Rendering
 
 Hula-hoop is able to conditionally return either server rendered HTML content or a simplified page suitable for complete client-side rendering. This optimizes the use of Fruit Loops page instances to the cases that are going to benefit and allows allows for rendering failover, should errors occur in supported server side cases.
+
+This behavior is controlled via the `module-map.json` file and generally should be transparent for most users. It may be AB tested via the `serverRoute` config option, discussed in the `endpoints.page` documentation below.
 
 ## Resources and Branches
 
@@ -19,6 +23,18 @@ Additionally, it can serve multiple versions of an application on the same endpo
 
 
 ## API
+
+### endpoints.page(app, options)
+
+Conditionally renders the requests using client-side or server-side rendering based on:
+- `serverRoute` flag specified in `module-map.json`
+- `userConfig` flag `serverRoute` flag
+  - `serverRoute === false` disabled all server-side rendering
+  - `serverRoute[hapiPath] === false` disable server-side rendering for a specific route
+
+Should an error occur while rendering the server-side page, the response will failover to the client-side rendering after logging the response.
+
+`options` is the combined list of options for both the `endpoints.serverSide` and `endpoints.clientSide` handlers discussed below.
 
 ### endpoints.serverSide(options)
 
