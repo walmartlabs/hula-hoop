@@ -14,44 +14,41 @@ Provides common endpoints and libraries implementing:
 ```javascript
 var HulaHoop = require('hula-hoop');
 
-exports.register = function (plugin, options, next) {
+// Setup the user endpoint routing
+var pageHandler = HulaHoop.endpoints.page(name, {
+  host: 'foo.com',
+  resourcesRoot: '/r/',
+  cacheResources: true,
+  ajaxCache: plugin.cache({ cache: '_default' })
+});
 
-  // Setup the user endpoint routing
-  var pageHandler = HulaHoop.endpoints.page(name, {
-    host: 'foo.com',
-    resourcesRoot: '/r/',
-    cacheResources: true,
-    ajaxCache: plugin.cache({ cache: '_default' })
-  });
-
-  plugin.select('app').route(
-    api.resourceLoader.routes().map(function(route) {
-      return {
-        path: route,
-        method: 'GET',
-        handler: pageHandler,
-        config: {
-          cache: {
-            expiresIn: 5*60*1000,
-            privacy: 'private'
-          }
-        }
-      };
-    })
-  );
-
-  // Setup resource handling
-  HulaHoop.api.resourceLoader.register(name, [
-    {name: 'main', version: '1.0.0', path: './build'}
-  ]);
-  plugin.select('app').route([
-    {
-      path: '/r/{path*}',
+server.route(
+  api.resourceLoader.routes().map(function(route) {
+    return {
+      path: route,
       method: 'GET',
-      handler: HulaHoop.endpoints.resources
-    }
-  ]);
-};
+      handler: pageHandler,
+      config: {
+        cache: {
+          expiresIn: 5*60*1000,
+          privacy: 'private'
+        }
+      }
+    };
+  })
+);
+
+// Setup resource handling
+HulaHoop.api.resourceLoader.register(name, [
+  {name: 'main', version: '1.0.0', path: './build'}
+]);
+server.route([
+  {
+    path: '/r/{path*}',
+    method: 'GET',
+    handler: HulaHoop.endpoints.resources
+  }
+]);
 ```
 
 This assumes that `./build` has the contents of the built Thorax application and the `module-map.json` file has been generated via the `hapi-routes` grunt task.
