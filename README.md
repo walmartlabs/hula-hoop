@@ -4,7 +4,7 @@ Server-side rendering components for Lumbar + Thorax + Hapi stacks.
 
 Provides common endpoints and libraries implementing:
 
-- Route-based Fruit-loops server-side rendering
+- Route-based [Fruit-loops](https://github.com/walmartlabs/fruit-loops) server-side rendering
 - Automatic fail over to client-side rendering
 - Application resource loading and serving
 - Conditional branch loading
@@ -95,7 +95,7 @@ Options include:
 - `cacheResources`: Boolean flag. True to cache loaded html and script resources indefinitely.
 - `userConfig(req)`: Used to generate the configuration for a given request. Used primarily to retrieve the `branch` field to select the rendering branch to utilize.
 - `ajaxCache`: Catbox cache used to cache AJAX responses retrieved via page execution.
-- `beforeExec(page, next)`: Fruit looks pool `beforeExec` method. Can be used to initialize pages to known states. Example:
+- `beforeExec(page, next)`: Fruit Loops pool `beforeExec` method. Can be used to initialize pages to known states. Example:
 
 ```javascript
     function(page, next) {
@@ -187,7 +187,7 @@ Retrieves the root directory that contains the file with the given resource path
 
 #### .routeInfo(branch, route)
 
-Returns the module map metadata for a given app brbanch and route.
+Returns the module map metadata for a given app branch and route.
 
 #### .routes()
 
