@@ -9,6 +9,53 @@ Provides common endpoints and libraries implementing:
 - Application resource loading and serving
 - Conditional branch loading
 
+## Usage
+
+```javascript
+var HulaHoop = require('hula-hoop');
+
+exports.register = function (plugin, options, next) {
+
+  // Setup the user endpoint routing
+  var pageHandler = HulaHoop.endpoints.page(name, {
+    host: 'foo.com',
+    resourcesRoot: '/r/',
+    cacheResources: true,
+    ajaxCache: pack.cache({ cache: '_default' }
+  });
+
+  pack.select('app').route(
+    api.resourceLoader.routes().map(function(route) {
+      return {
+        path: route,
+        method: 'GET',
+        handler: page,
+        config: {
+          cache: {
+            expiresIn: 5*60*1000,
+            privacy: 'private'
+          }
+        }
+      };
+    })
+  );
+
+  // Setup resource handling
+  HulaHoop.api.resourceLoader.register(name, [
+    {name: 'main', version: '1.0.0', path: './build'}
+  ]);
+  pack.select('app').route([
+    {
+      path: '/r/{path*}',
+      method: 'GET',
+      handler: HulaHoop.endpoints.resources
+    }
+  ]);
+};
+```
+
+This assumes that `./build` has the contents of the built Thorax application and the `module-map.json` file has been generated via the `hapi-routes` grunt task.
+
 ## Server vs. Client Side Rendering
 
 Hula-hoop is able to conditionally return either server rendered HTML content or a simplified page suitable for complete client-side rendering. This optimizes the use of Fruit Loops page instances to the cases that are going to benefit and allows allows for rendering failover, should errors occur in supported server side cases.
