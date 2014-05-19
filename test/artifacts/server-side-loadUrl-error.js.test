@@ -1,0 +1,10 @@
+var output = $('#output');
+
+// Fake out the navigator logic to work around the pooling logic
+var Backbone = {
+  history: {
+    loadUrl: function() {
+      throw new Error('Fail');
+    }
+  }
+};

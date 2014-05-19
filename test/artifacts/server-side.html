@@ -1,0 +1,19 @@
+<html>
+  <head></head>
+  <body>
+    <div id="output"></div>
+    <script src="foo.js"></script>
+    <script src="bat.js"></script>
+    <script src="baz.js"></script>
+    <script>
+      output.html(
+        output.html()
+        + '\n'
+        + (window.Handlebars ? 'handlebars ' : '')
+        + (window._ ? 'underscore ' : '')
+      );
+
+      emit('events');
+    </script>
+  </body>
+</html>

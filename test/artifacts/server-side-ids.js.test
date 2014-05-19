@@ -1,0 +1,18 @@
+var output = $('#output');
+
+var Backbone = {
+  history: {
+    location: window.location,
+
+    loadUrl: function() {
+      output.html(_id + '_idCounter: ' + window._idCounter + ' _reqId: ' + window._reqId + ' location: ' + Backbone.history.location);
+
+      emit('events');
+    }
+  }
+};
+
+// Defer until navigated execs
+setTimeout(function() {
+  output.html(_id + '_idCounter: ' + window._idCounter + ' _reqId: ' + window._reqId + ' location: ' + Backbone.history.location);
+}, 10);

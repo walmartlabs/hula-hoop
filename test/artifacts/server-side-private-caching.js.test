@@ -1,0 +1,26 @@
+var output = $('#output');
+
+// Fake out the navigator logic to work around the pooling logic
+var Backbone;
+if (!Backbone) {
+  Backbone = {
+    history: {
+      loadUrl: function() {
+        $.ajax({
+          url: '/private',
+          error: function() {
+            console.log(arguments);
+            throw new Error();
+          },
+          success: function(data) {
+            output.html(output.html() + 'data: ' + data.winning + '\n');
+          }
+        });
+
+        emit('events');
+      }
+    }
+  };
+}
+
+Backbone.history.loadUrl();

@@ -17,7 +17,52 @@ Hula-hoop maintains a list of all resources that are involved with running a giv
 
 Additionally, it can serve multiple versions of an application on the same endpoint in support of application-level AB testing or staged deploys. This is done by swapping the served index files through the `resourceLoader.index` API.
 
+
 ## API
+
+### endpoints.serverSide(options)
+
+Renders the given request using the server-side rendering engine. Errors are treated as fatal WRT the response lifecycle.
+
+Options include:
+
+- `host`: Host value used to generate `window.location` and perform relative AJAX calls. Example: `github.com`.
+- `resourcesRoot`: Root prefix that is stripped to map client resources to server files. Example: `/resources/scripts`
+- `poolSize`: Maximum number of page instances to maintain in the pool.
+- `cacheResources`: Boolean flag. True to cache loaded html and script resources indefinitely.
+- `userConfig(req)`: Used to generate the configuration for a given request. Used primarily to retrieve the `branch` field to select the rendering branch to utilize.
+- `ajaxCache`: Catbox cache used to cache AJAX responses retrieved via page execution.
+- `beforeExec(page, next)`: Fruit looks pool `beforeExec` method. Can be used to initialize pages to known states. Example:
+
+```javascript
+    function(page, next) {
+      // Provide a default seed value (and also avoid a NPE in lumbar loader due to missing
+      // screen object
+      page.window.devicePixelRatio = 2;
+      page.window.phoenixConfig = siteConfig;
+      next();
+    }
+```
+
+- `cleanup(page, next)`: Fruit loops Pool `cleanup` method. Used to perform cleanup after a response has been sent to the user, but before the page object is returned to the pool. Example:
+
+```javascript
+    function(page, next) {
+      page.window.Backbone.history.trigger('cleanup');
+
+      next();
+    }
+```
+
+- `maxServerExpires`: Maximum cache timeout for server side responses, in seconds. Defaults to 24 hours.
+
+Many of theses options map directly to Fruit Loops Pool options, whose [documentation][fruit-loops-pool] contains additional information.
+
+Logging:
+- `['server-side', 'pool']`: Navigation started. Includes page instances in existence and free as well as the number of queued requests in the data section.
+- `['server-side', 'error']`: Error occurred while executing application logic.
+- `['server-side', 'exec']`: Successful server-side rendering execution. Data includes various metadata regarding the response.
+
 
 ### endpoints.clientSide(app, options)
 
@@ -115,5 +160,6 @@ Generates the module-map file utilized by `resourceLoader` to track the routes s
 
 Note that using this task requires that [lumbar][] be installed as a sibling of hula-hoops at build time. Any arguments passed in the options field will be forwarded to the lumbar constructor, allowing for plugins and libraries to be specified.
 
+[fruit-loops-pool]: https://github.com/walmartlabs/fruit-loops#pooloptions
 [lumbar]: https://github.com/walmartlabs/lumbar
 [lumbar-long-expires]: https://github.com/walmartlabs/lumbar-long-expires

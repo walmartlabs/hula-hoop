@@ -1,0 +1,14 @@
+var output = $('#output');
+output.html(output.html() + '\nit ran');
+
+var Test = {
+  trigger: function(name) {
+    output.html(output.html() + name);
+  }
+};
+
+Backbone = {
+  history: {
+    loadUrl: function() {}
+  }
+};
