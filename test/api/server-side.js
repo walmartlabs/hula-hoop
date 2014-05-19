@@ -27,7 +27,6 @@ describe('serverSide handler', function() {
 
     var app = {};
     var options = {
-      poolSize: 5,
       cacheResources: true,
       host: 'foo.com',
       userConfig: function(req) {
@@ -49,7 +48,6 @@ describe('serverSide handler', function() {
 
     var args = FruitLoops.pool.firstCall.args[0];
     expect(args.poolSize).to.equal(5);
-    expect(args.poolSize).to.equal(5);
     expect(args.index).to.equal(__dirname + '/../artifacts/server-side.html');
     expect(args.cacheResources).to.be.true;
     expect(args.host).to.equal('foo.com');
@@ -59,7 +57,7 @@ describe('serverSide handler', function() {
   });
 
   it('should have proper data input and output', function(done) {
-    var handler = serverSide({}, {poolSize: 5, host: 'foo.com'});
+    var handler = serverSide({}, {poolSize: 4, host: 'foo.com'});
     var req = {
       url: Url.parse('http://localhost:8080/foo?bar=baz'),
       pre: {

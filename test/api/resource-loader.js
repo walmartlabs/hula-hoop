@@ -29,6 +29,10 @@ describe('resource-loader', function() {
           'index.html',
           'baz'
         ];
+      } else if (/io-error$/.test(name)) {
+        var err = new Error();
+        err.code = 'FAIL';
+        throw err;
       } else {
         var err = new Error();
         err.code = 'ENOTDIR';
@@ -86,6 +90,14 @@ describe('resource-loader', function() {
       expect(resourceLoader.info()).to.eql(info);
       expect(resourceLoader.info()).to.eql(info);
       done();
+    });
+    it('should handle IO errors', function() {
+      expect(function() {
+        resourceLoader.register('appName!', [
+          {name: 'foo', version: '1.0.0', path: 'io-error'}
+        ]);
+        resourceLoader.info();
+      }).to.throw();
     });
   });
 

@@ -6,7 +6,8 @@ var endpoint = require('../../lib/endpoints'),
 describe('endpoints#serverSide', function() {
   var server,
       options,
-      caching;
+      caching,
+      expired;
 
   var pageOptions;
 
@@ -14,6 +15,11 @@ describe('endpoints#serverSide', function() {
     caching = this.spy(function(request, reply) {
       reply({'winning': true});
     });
+    expired = this.spy(function(req, reply) {
+      reply({'winning': true})
+          .header('cache-control', 'max-age=-50');
+    });
+
     server = new Hapi.Server(0, {
       labels: ['api']
     });
@@ -26,6 +32,11 @@ describe('endpoints#serverSide', function() {
           expiresIn: 15*60*1000
         }
       }
+    });
+    server.route({
+      method: 'GET',
+      path: '/expired',
+      handler: expired
     });
     server.route({
       method: 'GET',
@@ -290,7 +301,44 @@ describe('endpoints#serverSide', function() {
     });
   });
 
-  it('should not cache no-cache ajax requests', function(done) {
+  it('should not cache expired cache ajax requests', function(done) {
+    this.stub(resourceLoader, 'asset', function(path) {
+      return __dirname + '/../artifacts/server-side-expired-caching.js.test';
+    });
+    pageOptions.ajaxCache = server.cache('fruit-loops', {});
+
+    server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
+    server.inject({
+      method: 'get',
+      url: '/foo/bar/bat',
+      payload: ''
+    }, function(res) {
+      // We aren't implementing immediate dequeue so we expect multiple requests here.
+      // Should we implement such a dequeue in the future then this would go to one
+      // (which is desired)
+      expect(expired.callCount).to.equal(3);
+      expect(res.payload).to.match(/<div id="output">(\ndata: true){3}/);
+
+      expect(res.headers['cache-control']).to.equal('no-cache');
+
+      setTimeout(function() {
+        server.inject({
+          method: 'get',
+          url: '/foo/bar/bat',
+          payload: ''
+        }, function(res) {
+          expect(expired.callCount).to.equal(4);
+          expect(res.payload).to.match(/<div id="output">(\ndata: true){4}/);
+
+          expect(res.headers['cache-control']).to.equal('no-cache');
+
+          setTimeout(done, 15);
+        });
+      }, 15);
+    });
+  });
+
+  it('should redirect properly', function(done) {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-redirect.js.test';
     });
@@ -320,6 +368,22 @@ describe('endpoints#serverSide', function() {
       payload: ''
     }, function(res) {
       expect(res.headers['cache-control']).to.equal('max-age=' + (24*60*60) + ', must-revalidate');
+      done();
+    });
+  });
+
+  it('should be max cached without ajax requests', function(done) {
+    this.stub(resourceLoader, 'asset', function(path) {
+      return __dirname + '/../artifacts/server-side.js.test';
+    });
+    pageOptions.maxServerExpires = 1*60*60;
+    server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
+    server.inject({
+      method: 'get',
+      url: '/foo/bar/bat',
+      payload: ''
+    }, function(res) {
+      expect(res.headers['cache-control']).to.equal('max-age=' + (1*60*60) + ', must-revalidate');
       done();
     });
   });
