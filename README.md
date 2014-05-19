@@ -21,15 +21,15 @@ exports.register = function (plugin, options, next) {
     host: 'foo.com',
     resourcesRoot: '/r/',
     cacheResources: true,
-    ajaxCache: pack.cache({ cache: '_default' }
+    ajaxCache: plugin.cache({ cache: '_default' })
   });
 
-  pack.select('app').route(
+  plugin.select('app').route(
     api.resourceLoader.routes().map(function(route) {
       return {
         path: route,
         method: 'GET',
-        handler: page,
+        handler: pageHandler,
         config: {
           cache: {
             expiresIn: 5*60*1000,
@@ -44,7 +44,7 @@ exports.register = function (plugin, options, next) {
   HulaHoop.api.resourceLoader.register(name, [
     {name: 'main', version: '1.0.0', path: './build'}
   ]);
-  pack.select('app').route([
+  plugin.select('app').route([
     {
       path: '/r/{path*}',
       method: 'GET',
