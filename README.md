@@ -91,7 +91,7 @@ Options include:
 
 - `host`: Host value used to generate `window.location` and perform relative AJAX calls. Example: `github.com`.
 - `resourcesRoot`: Root prefix that is stripped to map client resources to server files. Example: `/resources/scripts`
-- `poolSize`: Maximum number of page instances to maintain in the pool.
+- `poolSize`: Maximum number of page instances to maintain in the pool. This defaults to `5` and should be tuned for both the memory and traffic load of particular applications while in production.
 - `cacheResources`: Boolean flag. True to cache loaded html and script resources indefinitely.
 - `userConfig(req)`: Used to generate the configuration for a given request. Used primarily to retrieve the `branch` field to select the rendering branch to utilize.
 - `ajaxCache`: Catbox cache used to cache AJAX responses retrieved via page execution.
