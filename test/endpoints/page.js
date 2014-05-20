@@ -40,7 +40,7 @@ describe('endpoints#page', function() {
     });
   });
 
-  it('should route to server side', function(done) {
+  it('should run finalize', function(done) {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side.js.test';
     });
@@ -65,10 +65,22 @@ describe('endpoints#page', function() {
     });
   });
 
-  it('should route to server side', function(done) {
+  it('should route to server side without config', function(done) {
+    resourceLoader.routeInfo.restore();
+    this.stub(resourceLoader, 'routeInfo', function(branch, route) {
+      expect(branch).to.not.exist;
+      expect(route).to.equal('/foo/{path*}');
+      return {
+        serverRender: true,
+        js: ['1234/base.js', '1234/foo.js', '1234/bar.js'],
+        css: ['1234/base@2x.css', '1234/foo@2x.css']
+      };
+    });
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side.js.test';
     });
+
+    delete pageOptions.userConfig;
 
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.page('app', pageOptions)} });
     server.inject({
