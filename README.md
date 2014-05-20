@@ -1,10 +1,10 @@
 # Hula-Hoop
 
-Server-side rendering components for Lumbar + Thorax + Hapi stacks.
+Server-side rendering components for [Lumbar][] + [Thorax][] + [Hapi][] stacks.
 
 Provides common endpoints and libraries implementing:
 
-- Route-based [Fruit-loops](https://github.com/walmartlabs/fruit-loops) server-side rendering
+- Route-based [Fruit-loops][] server-side rendering
 - Automatic fail over to client-side rendering
 - Application resource loading and serving
 - Conditional branch loading
@@ -222,6 +222,9 @@ Generates the module-map file utilized by `resourceLoader` to track the routes s
 
 Note that using this task requires that [lumbar][] be installed as a sibling of hula-hoops at build time. Any arguments passed in the options field will be forwarded to the lumbar constructor, allowing for plugins and libraries to be specified.
 
+[Fruit-Loops]: https://github.com/walmartlabs/fruit-loops
 [fruit-loops-pool]: https://github.com/walmartlabs/fruit-loops#pooloptions
+[hapi]: https://github.com/spumko/hapi
 [lumbar]: https://github.com/walmartlabs/lumbar
 [lumbar-long-expires]: https://github.com/walmartlabs/lumbar-long-expires
+[thorax]: https://github.com/walmartlabs/thorax
