@@ -178,6 +178,22 @@ describe('resource-loader', function() {
           serverRender: true
         });
       });
+      it('should return latests info if no branch is supplied', function() {
+        resourceLoader.register('appName!', [
+          {name: 'foo', version: '1.0.0', path: 'baz'},
+          {name: 'bar', version: '2.0.0', path: 'bat'}
+        ]);
+
+        expect(resourceLoader.routeInfo(undefined, '/foo')).to.eql({
+          js: ['base.js', 'documents.js'],
+          css: ['base@2x.css']
+        });
+        expect(resourceLoader.routeInfo(undefined, '/foo/{path*}')).to.eql({
+          js: ['base.js', 'home.js'],
+          css: ['base@2x.css', 'home@2x.css'],
+          serverRender: true
+        });
+      });
       it('should handle simple module-map', function() {
         resourceLoader.register('appName!', [
           {name: 'foo', version: '1.0.0', path: 'baz'},
