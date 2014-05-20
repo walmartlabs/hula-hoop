@@ -10,9 +10,9 @@ module.exports = function(grunt) {
         outputFile = config.dest,
         nodeModules = __dirname + '/../node_modules/';
 
-    options = _.omit(config, 'config', 'dest', 'package');
+    var options = _.omit(config, 'config', 'dest', 'package'),
+        lumbar = Lumbar.init(lumbarFile, options);
 
-    var lumbar = Lumbar.init(lumbarFile, options);
     lumbar.moduleMap(config.package, {routeCallbacks: true}, function(err, map) {
       if (err) {
         throw err;
@@ -23,29 +23,39 @@ module.exports = function(grunt) {
         routes: {}
       };
 
-      // We only care about the passed package for server side concerns at this point
-      map = map[config.package].web;
+      // Extract any maps that are embedded in the response
+      function processMap(map, package, platform) {
+        if (map.isMap) {
+          _.each(map.modules, function(module, moduleName) {
+            ret.modules[moduleName] = resolveModule(ret, map, moduleName);
+          });
 
-      _.each(map.modules, function(module, moduleName) {
-        ret.modules[moduleName] = resolveModule(ret, map, moduleName);
-      });
+          // Append the loading prefix to each of the resource files
+          function prefix(path) {
+            return (platform ? platform + '/' : '') + path;
+          }
+          _.each(ret.modules, function(module) {
+            module.js = module.js.map(prefix);
+            module.css = module.css.map(prefix);
+          });
 
-      // Append the loading prefix to each of the resource files
-      function prefix(path) {
-        return config.package + '/' + path;
+          // Record the route -> module mapping
+          _.each(map.routes, function(moduleName, route) {
+            var module = ret.modules[moduleName],
+                hapiRoute = remapRoute(route);
+            ret.routes[hapiRoute] = moduleName;
+            ret.modules[moduleName].routes[hapiRoute] = map.modules[moduleName].routes[route];
+          });
+        } else {
+          // Walk the structure to try to find map objects
+          _.each(map, function(map, name) {
+            // This sneaky bit extracts the package and platform name, based on the nesting,
+            // while still supporting non-named platforms
+            processMap(map, package || name, package ? name : undefined);
+          });
+        }
       }
-      _.each(ret.modules, function(module) {
-        module.js = module.js.map(prefix);
-        module.css = module.css.map(prefix);
-      });
-
-      // Record the route -> module mapping
-      _.each(map.routes, function(moduleName, route) {
-        var module = ret.modules[moduleName],
-            hapiRoute = remapRoute(route);
-        ret.routes[hapiRoute] = moduleName;
-        ret.modules[moduleName].routes[hapiRoute] = map.modules[moduleName].routes[route];
-      });
+      processMap(map);
 
       grunt.file.write(outputFile, JSON.stringify(ret, undefined, 2));
       done();
