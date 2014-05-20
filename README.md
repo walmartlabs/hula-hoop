@@ -14,12 +14,22 @@ Provides common endpoints and libraries implementing:
 ```javascript
 var HulaHoop = require('hula-hoop');
 
+// Setup resource handling
+HulaHoop.api.resourceLoader.register(appName, [
+  {name: 'main', version: '1.0.0', path: './build'}
+]);
+server.route([
+  {
+    path: '/r/{path*}',
+    method: 'GET',
+    handler: HulaHoop.endpoints.resources()
+  }
+]);
+
 // Setup the user endpoint routing
-var pageHandler = HulaHoop.endpoints.page(name, {
+var pageHandler = HulaHoop.endpoints.page(appName, {
   host: 'foo.com',
-  resourcesRoot: '/r/',
-  cacheResources: true,
-  ajaxCache: plugin.cache({ cache: '_default' })
+  resourceRoot: '/r/'
 });
 
 server.route(
@@ -37,18 +47,6 @@ server.route(
     };
   })
 );
-
-// Setup resource handling
-HulaHoop.api.resourceLoader.register(name, [
-  {name: 'main', version: '1.0.0', path: './build'}
-]);
-server.route([
-  {
-    path: '/r/{path*}',
-    method: 'GET',
-    handler: HulaHoop.endpoints.resources
-  }
-]);
 ```
 
 This assumes that `./build` has the contents of the built Thorax application and the `module-map.json` file has been generated via the `hapi-routes` grunt task.
