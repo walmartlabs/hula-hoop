@@ -262,6 +262,7 @@ describe('resource-loader', function() {
     });
     it('should handle undefined input', function() {
       expect(resourceLoader.assetContainer()).to.not.exist;
+      expect(resourceLoader.assetContainer(null)).to.not.exist;
     });
     it('should return missing', function() {
       expect(resourceLoader.assetContainer('notBar')).to.not.exist;
