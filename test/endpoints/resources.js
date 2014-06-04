@@ -29,7 +29,7 @@ describe('endpoints - resources', function() {
           return '';
         });
         var req = { params: { path: '/directory' } };
-        expect(endpoint.resources().directory.path(req)).to.equal('quijibo?!??//??////?\\/quijibo');
+        expect(endpoint.resources().directory.path(req)).to.eql(Hapi.error.notFound());
         done();
       });
     });
