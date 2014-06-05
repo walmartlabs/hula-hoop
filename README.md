@@ -22,7 +22,12 @@ server.route([
   {
     path: '/r/{path*}',
     method: 'GET',
-    handler: HulaHoop.endpoints.resources()
+    handler: HulaHoop.endpoints.resources(),
+    config: {
+      cache: {
+        expiresIn: 365*24*60*60*1000
+      }
+    }
   }
 ]);
 
