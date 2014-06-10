@@ -13,30 +13,24 @@ module.exports = function(grunt) {
     var options = _.omit(config, 'config', 'dest', 'package'),
         lumbar = Lumbar.init(lumbarFile, options);
 
-    lumbar.moduleMap(config.package, {routeCallbacks: true}, function(err, map) {
+    lumbar.moduleMap(config.package, {routeCallbacks: true, localPath: true}, function(err, map) {
       if (err) {
         throw err;
       }
 
       var ret = {
         modules: {},
-        routes: {}
+        routes: {},
+        loadPrefix: ''
       };
 
       // Extract any maps that are embedded in the response
       function processMap(map, package, platform) {
         if (map.isMap) {
+          ret.loadPrefix = ret.loadPrefix || map.loadPrefix;
+
           _.each(map.modules, function(module, moduleName) {
             ret.modules[moduleName] = resolveModule(ret, map, moduleName);
-          });
-
-          // Append the loading prefix to each of the resource files
-          function prefix(path) {
-            return (platform ? platform + '/' : '') + path;
-          }
-          _.each(ret.modules, function(module) {
-            module.js = module.js.map(prefix);
-            module.css = module.css.map(prefix);
           });
 
           // Record the route -> module mapping
