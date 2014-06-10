@@ -127,7 +127,8 @@ describe('resource-loader', function() {
               "/foo": "documents",
               "/foo/{path*}": "home",
               "/home": "home"
-            }
+            },
+            "loadPrefix": "prefix!"
           });
         }
       });
@@ -202,6 +203,18 @@ describe('resource-loader', function() {
 
         expect(resourceLoader.routeInfo('foo', '/foo')).to.not.exist;
         expect(resourceLoader.routeInfo('foo', '/home')).to.not.exist;
+      });
+    });
+    describe('#loadPrefix', function() {
+      it('should return load prefix', function() {
+        resourceLoader.register('appName!', [
+          {name: 'foo', version: '1.0.0', path: 'baz'},
+          {name: 'bar', version: '2.0.0', path: 'bat'}
+        ]);
+
+        expect(resourceLoader.loadPrefix()).to.equal('prefix!');
+        expect(resourceLoader.loadPrefix('bar')).to.equal('prefix!');
+        expect(resourceLoader.loadPrefix('foo')).to.not.exist;
       });
     });
   });
