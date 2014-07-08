@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.1.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.2.0...master)
+
+## v0.2.0 - July 8th, 2014
+- Expose fruit-loops status response - 42e8f41
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.1.0...v0.2.0)
 
 ## v0.1.0 - June 9th, 2014
 - Update hapi-routes task for latest lumbar - 1126d42
