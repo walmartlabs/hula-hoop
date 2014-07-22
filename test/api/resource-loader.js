@@ -53,6 +53,26 @@ describe('resource-loader', function() {
         resourceLoader.register('appName!', []);
       }).to.throw('No resources defined');
     });
+    it('should ignore missing resources when requested', function() {
+      expect(function() {
+        resourceLoader.register('appName!', [
+          {name: 'foo', version: '1.0.0', path: 'bazbaz'},
+          {name: 'bar', version: '2.0.0', path: 'foo', allowMissing: true}
+        ]);
+
+        var info = [
+          {
+            name: 'appName!',
+            versions: [{
+              info: 'custom blerg: ' + process.cwd() + '/bazbaz/VERSION',
+              name: 'foo'
+            }]
+          }
+        ];
+
+        expect(resourceLoader.info()).to.eql(info);
+      });
+    });
   });
 
   describe('#info', function() {

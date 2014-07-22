@@ -172,6 +172,7 @@ Each resource object defines:
 - `name`: Name of the branch for this resource. This is the value used when using the `index` API below.
 - `version`: Semver value of this version. If omitted name will be used to determine the default index file.
 - `path`: Path to the directory containing this branch's source.
+- `allowMissing`: Optional parameter which allows for missing resources to be ignored, rather than throw an error
 
 Within the resource directory, the `index.html` and `module-map.json` files are given special treatment. All other files must not have duplicates and should be versioned via a system such as [lumbar-long-expires][].
 
