@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.2.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.2.1...master)
+
+## v0.2.1 - July 28th, 2014
+- Use exec for cleanup error handler - ea73f15
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.2.0...v0.2.1)
 
 ## v0.2.0 - July 8th, 2014
 - Expose fruit-loops status response - 42e8f41
