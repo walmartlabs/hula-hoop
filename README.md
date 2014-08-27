@@ -58,7 +58,7 @@ This assumes that `./build` has the contents of the built Thorax application and
 
 ## Server vs. Client Side Rendering
 
-Hula-hoop is able to conditionally return either server rendered HTML content or a simplified page suitable for complete client-side rendering. This optimizes the use of Fruit Loops page instances to the cases that are going to benefit and allows allows for rendering failover, should errors occur in supported server side cases.
+Hula-hoop is able to conditionally return either server rendered HTML content or a simplified page suitable for complete client-side rendering. This optimizes the use of Fruit Loops page instances to the cases that are going to benefit and allows for rendering failover, should errors occur in supported server side cases.
 
 This behavior is controlled via the `module-map.json` file and generally should be transparent for most users. It may be AB tested via the `serverRoute` config option, discussed in the `endpoints.page` documentation below.
 
