@@ -35,6 +35,12 @@ describe('endpoints#serverSide', function() {
     });
     server.route({
       method: 'GET',
+      path: '/timeout',
+      handler: function() {
+      }
+    });
+    server.route({
+      method: 'GET',
       path: '/expired',
       handler: expired
     });
@@ -331,6 +337,39 @@ describe('endpoints#serverSide', function() {
           expect(res.payload).to.match(/<div id="output">(\ndata: true){4}/);
 
           expect(res.headers['cache-control']).to.equal('no-cache');
+
+          setTimeout(done, 15);
+        });
+      }, 15);
+    });
+  });
+
+  it('should timeout ajax requests', function(done) {
+    this.stub(resourceLoader, 'asset', function(path) {
+      return __dirname + '/../artifacts/server-side-timeout.js.test';
+    });
+    pageOptions.ajaxCache = server.cache('fruit-loops', {});
+    pageOptions.ajaxTimeout = 100;
+
+    server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
+    server.inject({
+      method: 'get',
+      url: '/foo/bar/bat',
+      payload: ''
+    }, function(res) {
+      expect(res.payload).to.match(/<div id="output">(\ndata: ETIMEDOUT){3}/);
+
+      expect(res.headers['cache-control']).to.match(/no-cache/);
+
+      setTimeout(function() {
+        server.inject({
+          method: 'get',
+          url: '/foo/bar/bat',
+          payload: ''
+        }, function(res) {
+          expect(res.payload).to.match(/<div id="output">(\ndata: ETIMEDOUT){4}/);
+
+          expect(res.headers['cache-control']).to.match(/no-cache/);
 
           setTimeout(done, 15);
         });

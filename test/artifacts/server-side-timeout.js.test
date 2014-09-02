@@ -1,0 +1,25 @@
+var output = $('#output');
+
+// Fake out the navigator logic to work around the pooling logic
+var Backbone;
+if (!Backbone) {
+  Backbone = {
+    history: {
+      loadUrl: function() {
+        $.ajax({
+          url: '/timeout',
+          error: function(xhr, status, err) {
+            output.html(output.html() + 'data: ' + err.code + '\n');
+          },
+          success: function() {
+            throw new Error();
+          }
+        });
+
+        emit('events');
+      }
+    }
+  };
+}
+
+Backbone.history.loadUrl();
