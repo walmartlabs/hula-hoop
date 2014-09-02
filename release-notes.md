@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.3.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.4.0...master)
+
+## v0.4.0 - September 2nd, 2014
+- Use client side rendering pipeline for 500s - 8b0af87
+- Fix timeout test for cached timeout invalidate - a8f4557
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.3.0...v0.4.0)
 
 ## v0.3.0 - September 2nd, 2014
 - Forward fruit loops metadata on page exec - 0699c45
