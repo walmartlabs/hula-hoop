@@ -166,9 +166,27 @@ describe('endpoints#page', function() {
       done();
     });
   });
-  it('should log and output the default index file on server side', function(done) {
+  it('should log and output the default index file on server side throw', function(done) {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-error.js.test';
+    });
+
+    server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.page('app', pageOptions)} });
+    server.inject({
+      method: 'get',
+      url: '/foo/bar/bat',
+      payload: ''
+    }, function(res) {
+      expect(res.payload).to.not.match(/\$serverCache/);
+      expect(res.payload).to.not.match(/<div id="output">(\nit ran){3}/);
+      expect(res.payload).to.match(/module.exports = require\(/);
+
+      done();
+    });
+  });
+  it('should log and output the default index file on 500 error', function(done) {
+    this.stub(resourceLoader, 'asset', function(path) {
+      return __dirname + '/../artifacts/server-side-500.js.test';
     });
 
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.page('app', pageOptions)} });
