@@ -5,7 +5,7 @@ var Backbone = {
     location: window.location,
 
     loadUrl: function() {
-      output.html(_id + '_idCounter: ' + window._idCounter + ' _reqId: ' + window._reqId + ' location: ' + Backbone.history.location);
+      output.html(FruitLoops.id + '_idCounter: ' + window._idCounter + ' _reqId: ' + window._reqId + ' location: ' + Backbone.history.location);
 
       emit('events');
     }
@@ -14,5 +14,5 @@ var Backbone = {
 
 // Defer until navigated execs
 setTimeout(function() {
-  output.html(_id + '_idCounter: ' + window._idCounter + ' _reqId: ' + window._reqId + ' location: ' + Backbone.history.location);
+  output.html(FruitLoops.id + '_idCounter: ' + window._idCounter + ' _reqId: ' + window._reqId + ' location: ' + Backbone.history.location);
 }, 10);
