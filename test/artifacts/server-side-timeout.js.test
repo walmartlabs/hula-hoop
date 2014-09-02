@@ -9,7 +9,7 @@ if (!Backbone) {
         $.ajax({
           url: '/timeout',
           error: function(xhr, status, err) {
-            output.html(output.html() + 'data: ' + err.code + '\n');
+            output.html(output.html() + 'data: ' + err.message + '\n');
           },
           success: function() {
             throw new Error();
