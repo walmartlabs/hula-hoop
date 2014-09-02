@@ -2,7 +2,17 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.2.1...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.3.0...master)
+
+## v0.3.0 - September 2nd, 2014
+- Forward fruit loops metadata on page exec - 0699c45
+- Allow for global ajax timeouts - 13a4495
+- Update tests to run in Hapi 6 - 401ccc5
+
+Compatibility notes:
+- See Fruit Loops 0.11.0 release notes
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.2.1...v0.3.0)
 
 ## v0.2.1 - July 28th, 2014
 - Use exec for cleanup error handler - ea73f15
