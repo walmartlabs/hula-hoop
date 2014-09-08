@@ -64,6 +64,7 @@ describe('endpoints#serverSide', function() {
     server.start(function() {
       options = {branch: 'foo'};
       pageOptions = {
+        ajax: {},
         cacheResources: true,
         poolSize: 5,
         host: 'localhost:' + server.info.port
@@ -200,7 +201,7 @@ describe('endpoints#serverSide', function() {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-caching.js.test';
     });
-    pageOptions.ajaxCache = server.cache('fruit-loops', {});
+    pageOptions.ajax.cache = server.cache('fruit-loops', {});
 
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
     server.inject({
@@ -237,7 +238,7 @@ describe('endpoints#serverSide', function() {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-private-caching.js.test';
     });
-    pageOptions.ajaxCache = server.cache('fruit-loops', {});
+    pageOptions.ajax.cache = server.cache('fruit-loops', {});
 
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
     server.inject({
@@ -274,7 +275,7 @@ describe('endpoints#serverSide', function() {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-no-caching.js.test';
     });
-    pageOptions.ajaxCache = server.cache('fruit-loops', {});
+    pageOptions.ajax.cache = server.cache('fruit-loops', {});
 
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
     server.inject({
@@ -311,7 +312,7 @@ describe('endpoints#serverSide', function() {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-expired-caching.js.test';
     });
-    pageOptions.ajaxCache = server.cache('fruit-loops', {});
+    pageOptions.ajax.cache = server.cache('fruit-loops', {});
 
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
     server.inject({
@@ -348,8 +349,8 @@ describe('endpoints#serverSide', function() {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-timeout.js.test';
     });
-    pageOptions.ajaxCache = server.cache('fruit-loops', {});
-    pageOptions.ajaxTimeout = 100;
+    pageOptions.ajax.cache = server.cache('fruit-loops', {});
+    pageOptions.ajax.timeout = 100;
 
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
     server.inject({
@@ -381,7 +382,7 @@ describe('endpoints#serverSide', function() {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-redirect.js.test';
     });
-    pageOptions.ajaxCache = server.cache('fruit-loops', {});
+    pageOptions.ajax.cache = server.cache('fruit-loops', {});
 
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
     server.inject({
