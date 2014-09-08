@@ -9,7 +9,6 @@ if (!Backbone) {
         $.ajax({
           url: '/private',
           error: function() {
-            console.log(arguments);
             throw new Error();
           },
           success: function(data) {
