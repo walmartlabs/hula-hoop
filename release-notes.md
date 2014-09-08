@@ -2,7 +2,15 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.4.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.5.0...master)
+
+## v0.5.0 - September 8th, 2014
+- Update for ajax options object - 7117a89
+
+Compatibility notes:
+- `ajaxCache` and `ajaxTimeout` config options moved to `ajax.cache` and `ajax.timeout`
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.4.0...v0.5.0)
 
 ## v0.4.0 - September 2nd, 2014
 - Use client side rendering pipeline for 500s - 8b0af87
