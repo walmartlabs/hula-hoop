@@ -2,7 +2,16 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.5.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.6.0...master)
+
+## v0.6.0 - September 10th, 2014
+- Require publicConfig endpoint for branch selection - ed1a041
+- Expose req.pre in metadata - e1a80f4
+
+Compatibility notes:
+- `publicConfig` must now be passed in order to support multiple branches for server side rendering.
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.5.0...v0.6.0)
 
 ## v0.5.0 - September 8th, 2014
 - Update for ajax options object - 7117a89
