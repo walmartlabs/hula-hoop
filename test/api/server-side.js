@@ -29,8 +29,8 @@ describe('serverSide handler', function() {
     var options = {
       cacheResources: true,
       host: 'foo.com',
-      userConfig: function(req) {
-        return req.pre.config.user;
+      publicConfig: function(req) {
+        return req.pre.config.public;
       }
     };
     serverSide(app, options)({
@@ -38,7 +38,7 @@ describe('serverSide handler', function() {
       log: function() {},
       pre: {
         config: {
-          user: {
+          public: {
             branch: 'foo'
           }
         }
