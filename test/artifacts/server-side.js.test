@@ -1,2 +1,8 @@
 var output = $('#output');
 output.html(output.html() + '\nit ran');
+
+Backbone = {
+  history: {
+    loadUrl: function() {}
+  }
+};
