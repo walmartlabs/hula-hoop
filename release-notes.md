@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.6.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.7.0...master)
+
+## v0.7.0 - September 19th, 2014
+- [#6](https://github.com/walmartlabs/hula-hoop/pull/6) - Expose maxQueue and queueTimeout server options ([@kpdecker](https://api.github.com/users/kpdecker))
+- Fix failing unit tests under new catbox - 3a159b3
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.6.0...v0.7.0)
 
 ## v0.6.0 - September 10th, 2014
 - Require publicConfig endpoint for branch selection - ed1a041
