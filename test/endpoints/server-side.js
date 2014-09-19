@@ -169,6 +169,95 @@ describe('endpoints#serverSide', function() {
     });
   });
 
+  it('should throw on server side queue full error', function(done) {
+    this.stub(resourceLoader, 'asset', function(path) {
+      return __dirname + '/../artifacts/server-side.js.test';
+    });
+
+    pageOptions.poolSize = 1;
+    pageOptions.maxQueue = 1;
+    server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
+
+    var counter = 0,
+        serverCount = 0,
+        errorCount = 0,
+        logCount = 0;
+    server.on('request', function(request, event, tags) {
+      if (tags['queue-full']) {
+        logCount++;
+      }
+    });
+    function complete(res) {
+      try {
+        counter++;
+
+        if (/\$serverCache/.test(res.payload)) {
+          serverCount++;
+        } else if (/An internal server error occurred/.test(res.payload)) {
+          errorCount++;
+        }
+
+        if (counter >= 3) {
+          expect(serverCount).to.equal(2);
+          expect(errorCount).to.equal(1);
+          expect(logCount).to.equal(1);
+          done();
+        }
+      } catch (err) {
+        counter = -1;
+        throw err;
+      }
+    }
+
+    server.inject({method: 'get', url: '/foo/bar/bat', payload: '' }, complete);
+    server.inject({method: 'get', url: '/foo/bar/bat', payload: '' }, complete);
+    server.inject({method: 'get', url: '/foo/bar/bat', payload: '' }, complete);
+  });
+
+  it('should throw on server side queue timeout error', function(done) {
+    this.stub(resourceLoader, 'asset', function(path) {
+      return __dirname + '/../artifacts/server-side.js.test';
+    });
+
+    pageOptions.poolSize = 1;
+    pageOptions.queueTimeout = 1;
+    server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
+
+    var counter = 0,
+        serverCount = 0,
+        errorCount = 0,
+        logCount = 0;
+    server.on('request', function(request, event, tags) {
+      if (tags['queue-timeout']) {
+        logCount++;
+      }
+    });
+    function complete(res) {
+      try {
+        counter++;
+
+        if (/\$serverCache/.test(res.payload)) {
+          serverCount++;
+        } else if (/An internal server error occurred/.test(res.payload)) {
+          errorCount++;
+        }
+
+        if (counter >= 2) {
+          expect(serverCount).to.equal(1);
+          expect(errorCount).to.equal(1);
+          expect(logCount).to.equal(1);
+          done();
+        }
+      } catch (err) {
+        counter = -1;
+        throw err;
+      }
+    }
+
+    server.inject({method: 'get', url: '/foo/bar/bat', payload: '' }, complete);
+    server.inject({method: 'get', url: '/foo/bar/bat', payload: '' }, complete);
+  });
+
   it('should throw on server side on navigate error', function(done) {
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side-loadUrl-error.js.test';
