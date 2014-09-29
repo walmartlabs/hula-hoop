@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.7.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.7.1...master)
+
+## v0.7.1 - September 29th, 2014
+- Defer client side rendering for page operations - 58418e9
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.7.0...v0.7.1)
 
 ## v0.7.0 - September 19th, 2014
 - [#6](https://github.com/walmartlabs/hula-hoop/pull/6) - Expose maxQueue and queueTimeout server options ([@kpdecker](https://api.github.com/users/kpdecker))
