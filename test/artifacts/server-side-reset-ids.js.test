@@ -1,0 +1,24 @@
+var output = $('#output');
+
+var req;
+
+function _resetIdCounter(_req) {
+  req = _req;
+}
+
+var Backbone = {
+  history: {
+    location: window.location,
+
+    loadUrl: function() {
+      output.html(FruitLoops.id + ' req: ' + req + ' location: ' + Backbone.history.location);
+
+      emit('events');
+    }
+  }
+};
+
+// Defer until navigated execs
+setTimeout(function() {
+  output.html(FruitLoops.id + ' req: ' + req + ' location: ' + Backbone.history.location);
+}, 10);

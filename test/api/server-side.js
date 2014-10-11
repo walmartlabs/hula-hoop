@@ -80,7 +80,7 @@ describe('serverSide handler', function() {
       resourceLoader.asset.reset();
       expect(resourceLoader.asset).to.not.have.been.called;
 
-      expect(response).to.match(/0_idCounter: 0 _reqId: undefined location: http:\/\/foo.com\/foo\?bar=baz/);
+      expect(response).to.match(/0_idCounter: 0 _reqId: \d\d\d location: http:\/\/foo.com\/foo\?bar=baz/);
 
       setTimeout(function() {
         req.log.calledWith(['server-side', 'pool'], {queued: 0, pages: 1, free: 0});
@@ -92,6 +92,43 @@ describe('serverSide handler', function() {
           expect(resourceLoader.asset).to.not.have.been.called;
 
           expect(response).to.match(/0_idCounter: 0 _reqId: \d\d\d location: http:\/\/foo.com\/bar/);
+          done();
+        });
+      }, 15);
+    });
+  });
+  it('should exec resetIdCounter when available', function(done) {
+    resourceLoader.asset.restore();
+    this.stub(resourceLoader, 'asset', function() {
+      return __dirname + '/../artifacts/server-side-reset-ids.js.test';
+    });
+
+    var handler = serverSide({}, {poolSize: 4, host: 'foo.com'});
+    var req = {
+      url: Url.parse('http://localhost:8080/foo?bar=baz'),
+      pre: {
+        config: {
+          user: {
+            branch: 'foo'
+          }
+        }
+      },
+      log: this.spy()
+    };
+
+    handler(req, function(err, response) {
+      expect(err).to.not.exist;
+      expect(response).to.be.a('string');
+
+      expect(response).to.match(/req: \d\d\d /);
+
+      setTimeout(function() {
+        req.url.path = '/bar';
+        handler(req, function(err, response) {
+          expect(err).to.not.exist;
+          expect(response).to.be.a('string');
+
+          expect(response).to.match(/req: \d\d\d /);
           done();
         });
       }, 15);
@@ -143,7 +180,7 @@ describe('serverSide handler', function() {
 
     handler(req, function(err, response) {
       expect(err).to.not.exist;
-      expect(response).to.match(/_idCounter: 0 _reqId: undefined location: http:\/\/foo.com\/foo\?bar=baz/);
+      expect(response).to.match(/_idCounter: 0 _reqId: \d\d\d location: http:\/\/foo.com\/foo\?bar=baz/);
       done();
     });
   });
