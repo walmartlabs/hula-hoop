@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.7.1...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.8.0...master)
+
+## v0.8.0 - October 11th, 2014
+- Use window._resetIdCounter for id reset - 19d7c55
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.7.1...v0.8.0)
 
 ## v0.7.1 - September 29th, 2014
 - Defer client side rendering for page operations - 58418e9
