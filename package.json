@@ -1,7 +1,7 @@
 {
   "name": "hula-hoop",
   "description": "Thorax server-side Hapi components",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "authors": [
     "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)"
   ],
