@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.8.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.8.1...master)
+
+## v0.8.1 - October 19th, 2014
+- Make loadHtml always async - 4b0d3e1
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.8.0...v0.8.1)
 
 ## v0.8.0 - October 11th, 2014
 - Use window._resetIdCounter for id reset - 19d7c55
