@@ -111,6 +111,7 @@ Options include:
     }
 ```
 
+- `beforeNavigate(page, isExistingPage, next)`: Optional callback called before Backbone's route handlers. Must call `next` once complete to continue page execution.
 - `cleanup(page, next)`: Fruit loops Pool `cleanup` method. Used to perform cleanup after a response has been sent to the user, but before the page object is returned to the pool. Example:
 
 ```javascript
