@@ -216,4 +216,35 @@ describe('serverSide handler', function() {
       complete = true;
     });
   });
+
+  it('should call beforeNavigate', function(done) {
+    var isBeforeNavigateCalled = false;
+
+    var options = {
+      poolSize: 5,
+      host: 'foo.com',
+      beforeNavigate: function(page, isExistingPage, next) {
+        isBeforeNavigateCalled = true;
+        next();
+      }
+    };
+
+    var handler = serverSide({}, options);
+    var req = {
+      url: Url.parse('http://localhost:8080/foo?bar=baz'),
+      pre: {
+        config: {
+          user: {
+            branch: 'foo'
+          }
+        }
+      },
+      log: this.spy()
+    };
+
+    handler(req, function(err, response) {
+      expect(isBeforeNavigateCalled).to.be.true;
+      done();
+    });
+  });
 });
