@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.8.1...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.9.0...master)
+
+## v0.9.0 - November 19th, 2014
+- [#8](https://github.com/walmartlabs/hula-hoop/pull/8) - Add beforeNavigate hook ([@Candid](https://api.github.com/users/Candid))
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.8.1...v0.9.0)
 
 ## v0.8.1 - October 19th, 2014
 - Make loadHtml always async - 4b0d3e1
