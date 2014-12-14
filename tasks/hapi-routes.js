@@ -1,5 +1,7 @@
 var _ = require('underscore'),
-    Lumbar = require('lumbar');
+    Lumbar = require('lumbar'),
+
+    remapRoute = require('../lib/remap-route');
 
 module.exports = function(grunt) {
   grunt.registerMultiTask('hapi-routes', 'outputs a projects module map', function() {
@@ -102,24 +104,4 @@ function selectCSS(module) {
     css = _.last(css);
   }
   return css && css.href;
-}
-
-
-// Remaps a backbone-style route to a hapi-style route.
-// Note that neither system supports all of the features of the other so conflicts may occur.
-// These situations are left to the application to resolve.
-function remapRoute(route) {
-  // (/:foo) -> /{foo?}
-  // (:foo) -> {foo?}
-  // :foo -> {foo}
-  // *foo -> {foo*}
-  route = route
-      .replace(/\(\/:(\w+?)\)/g, '/{$1?}')
-      .replace(/\(:(\w+?)\)/g, '{$1?}')
-      .replace(/:(\w+)/g, '{$1}')
-      .replace(/\*(\w+)/g, '{$1*}');
-
-  // route = route
-  //     .replace(/\{(\w+)\}$/, '{$1?}');
-  return '/' + route;
 }
