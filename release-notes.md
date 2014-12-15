@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.9.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.0.0...master)
+
+## v1.0.0 - December 15th, 2014
+- [#9](https://github.com/walmartlabs/hula-hoop/issues/9) - Add support for circus.json route lists ([@kpdecker](https://api.github.com/users/kpdecker))
+- Add better error for missing index file - 5ac6498
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v0.9.0...v1.0.0)
 
 ## v0.9.0 - November 19th, 2014
 - [#8](https://github.com/walmartlabs/hula-hoop/pull/8) - Add beforeNavigate hook ([@Candid](https://api.github.com/users/Candid))
