@@ -1,6 +1,6 @@
 # Hula-Hoop
 
-Server-side rendering components for [Lumbar][] + [Thorax][] + [Hapi][] stacks.
+Server-side rendering components for [Circus][]/[Lumbar][] + [Thorax][] + [Hapi][] stacks.
 
 Provides common endpoints and libraries implementing:
 
@@ -54,13 +54,13 @@ server.route(
 );
 ```
 
-This assumes that `./build` has the contents of the built Thorax application and the `module-map.json` file has been generated via the `hapi-routes` grunt task.
+This assumes that `./build` has the contents of the built Thorax application and the either the `module-map.json` file has been generated via the `hapi-routes` grunt task or the `circus.json` file has been properly constructed via the route converter plugin.
 
 ## Server vs. Client Side Rendering
 
 Hula-hoop is able to conditionally return either server rendered HTML content or a simplified page suitable for complete client-side rendering. This optimizes the use of Fruit Loops page instances to the cases that are going to benefit and allows for rendering failover, should errors occur in supported server side cases.
 
-This behavior is controlled via the `module-map.json` file and generally should be transparent for most users. It may be AB tested via the `serverRoute` config option, discussed in the `endpoints.page` documentation below.
+This behavior is controlled via the project config file and generally should be transparent for most users. It may be AB tested via the `serverRoute` config option, discussed in the `endpoints.page` documentation below.
 
 ## Resources and Branches
 
@@ -74,7 +74,7 @@ Additionally, it can serve multiple versions of an application on the same endpo
 ### endpoints.page(app, options)
 
 Conditionally renders the requests using client-side or server-side rendering based on:
-- `serverRoute` flag specified in `module-map.json`
+- `serverRoute` flag specified in project config file
 - `userConfig` flag `serverRoute` flag
   - `serverRoute === false` disabled all server-side rendering
   - `serverRoute[hapiPath] === false` disable server-side rendering for a specific route
@@ -174,9 +174,9 @@ Each resource object defines:
 - `version`: Semver value of this version. If omitted name will be used to determine the default index file.
 - `path`: Path to the directory containing this branch's source.
 
-Within the resource directory, the `index.html` and `module-map.json` files are given special treatment. All other files must not have duplicates and should be versioned via a system such as [lumbar-long-expires][].
+Within the resource directory, the `index.html`, `circus.json`, and `module-map.json` files are given special treatment. All other files must not have duplicates and should be versioned via a system such as [lumbar-long-expires][] or webpack hashes.
 
-`module-map.json` contains the route information for the application and will not be exposed as a resource available for consumption on the `asset` or `assetContainer` APIs. If using Lumbar, this can be generated using the [hapi-routes](#hapi-routes) grunt task included in this project.
+The project configuration file, `module-map.json` or `circus.json`, contains the route information for the application and will not be exposed as a resource available for consumption on the `asset` or `assetContainer` APIs. If using Lumbar, this can be generated using the [hapi-routes](#hapi-routes) grunt task included in this project and webpack builds using the [router converter plugin](#route-converter).
 
 #### .index(app, branch)
 
@@ -228,9 +228,31 @@ Generates the module-map file utilized by `resourceLoader` to track the routes s
 
 Note that using this task requires that [lumbar][] be installed as a sibling of hula-hoops at build time. Any arguments passed in the options field will be forwarded to the lumbar constructor, allowing for plugins and libraries to be specified.
 
+
+## Webpack Plugins
+
+### route-converter
+
+Generates a `hulahoop` structure for `circus.json`, used to configure hula-hoop at runtime.
+
+This should be passed in to the webpack plugin configuration object.
+
+```javascript
+var RouteConverterPlugin = require('hula-hoop/webpack/router-converter');
+
+...
+
+  plugins: [
+    new RouteConverterPlugin()
+  ]
+
+...
+```
+
 [Fruit-Loops]: https://github.com/walmartlabs/fruit-loops
 [fruit-loops-pool]: https://github.com/walmartlabs/fruit-loops#pooloptions
 [hapi]: https://github.com/spumko/hapi
+[circus]: https://github.com/walmartlabs/circus
 [lumbar]: https://github.com/walmartlabs/lumbar
 [lumbar-long-expires]: https://github.com/walmartlabs/lumbar-long-expires
 [thorax]: https://github.com/walmartlabs/thorax

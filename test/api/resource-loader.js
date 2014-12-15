@@ -102,6 +102,8 @@ describe('resource-loader', function() {
   });
 
   describe('route info', function() {
+    var useCircus;
+
     beforeEach(function() {
       this.stub(fs, 'readFileSync', function(name) {
         // Mock out module-map.json files
@@ -110,6 +112,54 @@ describe('resource-loader', function() {
             '/foo',
             '/foo/{path*}'
           ]);
+        } else if (/\/circus.json$/.test(name)) {
+          return JSON.stringify({
+            "hulahoop": {
+              "modules": [
+                {"js": ["bundle.js"], "css": ["0.bundle.css"], "serverRender": true},
+                {"js": ["1.bundle.js"], "css": ["1.bundle.css"], "serverRender": true},
+                {"js": ["2.bundle.js"]},
+                {"css": ["3.bundle.css"], "serverRender": true}
+              ],
+              "routes": {
+                "/": 1,
+                "/foo/{path*}": 2,
+                "/hai": 3
+              }
+            },
+            "chunks": [
+              {"js": "bundle.js", "css": "0.bundle.css"},
+              {"js": "1.bundle.js", "css": "1.bundle.css"},
+              {"js": "2.bundle.js"},
+              {"css": "3.bundle.css"}
+            ],
+            "modules": {
+              "0": {
+                "chunk": 0,
+                "name": "oh-hai/src/client/index"
+              },
+              "1": {
+                "chunk": 1,
+                "name": "oh-hai/src/client/hai"
+              },
+              "2": {
+                "chunk": 2,
+                "name": "oh-hai/src/client/views/hai"
+              },
+              "3": {
+                "chunk": 3,
+                "name": "oh-hai/src/client/views/hai.handlebars"
+              }
+            },
+            "files": [
+              "oh-hai.js",
+              "oh-hai.js.map",
+              "1.oh-hai.js",
+              "1.oh-hai.js.map"
+            ],
+            "entry": "oh-hai.js",
+            "serverRender": true
+          });
         } else {
           return JSON.stringify({
             "modules": {
@@ -133,9 +183,19 @@ describe('resource-loader', function() {
         }
       });
       this.stub(fs, 'existsSync', function(name) {
-        return true;
+        if (/\/circus.json$/.test(name)) {
+          return useCircus;
+        } else if (/\/module-map.json/.test(name)) {
+          return !useCircus;
+        } else {
+          return true;
+        }
       });
     });
+    afterEach(function() {
+      useCircus = false;
+    });
+
     describe('#routes', function() {
       it('should load routes', function() {
         resourceLoader.register('appName!', [
@@ -203,6 +263,27 @@ describe('resource-loader', function() {
 
         expect(resourceLoader.routeInfo('foo', '/foo')).to.not.exist;
         expect(resourceLoader.routeInfo('foo', '/home')).to.not.exist;
+      });
+      it('should handle simple circus declaration', function() {
+        useCircus = true;
+
+        resourceLoader.register('appName!', [
+          {name: 'foo', version: '1.0.0', path: 'baz'},
+          {name: 'bar', version: '2.0.0', path: 'bat'}
+        ]);
+
+        expect(resourceLoader.routeInfo(undefined, '/')).to.eql({
+          js: ['1.bundle.js'],
+          css: ['1.bundle.css'],
+          serverRender: true
+        });
+        expect(resourceLoader.routeInfo(undefined, '/foo/{path*}')).to.eql({
+          js: ['2.bundle.js']
+        });
+        expect(resourceLoader.routeInfo(undefined, '/hai')).to.eql({
+          css: ['3.bundle.css'],
+          serverRender: true
+        });
       });
     });
     describe('#loadPrefix', function() {
