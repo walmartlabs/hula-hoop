@@ -1,4 +1,5 @@
 var endpoint = require('../../lib/endpoints'),
+    Boom = require('boom'),
     Hapi = require('hapi'),
     resourceLoader = require('../../lib/api/resource-loader');
 
@@ -6,7 +7,9 @@ describe('endpoints - resources', function() {
   var server;
 
   beforeEach(function(done) {
-    server = new Hapi.Server(0, {
+    server = new Hapi.Server();
+    server.connection({
+      port: 0,
       labels: ['api']
     });
 
@@ -29,7 +32,7 @@ describe('endpoints - resources', function() {
           return '';
         });
         var req = { params: { path: '/directory' } };
-        expect(endpoint.resources().directory.path(req)).to.eql(Hapi.error.notFound());
+        expect(endpoint.resources().directory.path(req)).to.eql(Boom.notFound());
         done();
       });
     });
