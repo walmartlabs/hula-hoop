@@ -20,12 +20,14 @@ describe('endpoints#serverSide', function() {
           .header('cache-control', 'max-age=-50');
     });
 
-    server = new Hapi.Server();
+    server = new Hapi.Server(0, {labels:['api']});
+    
+    //for hapi 8
 
-    server.connection({
-      port: 0,
-      labels: ['api']
-    });
+    // server.connection({
+    //   port: 0,
+    //   labels: ['api']
+    // });
 
     server.route({
       method: 'GET',

@@ -9,11 +9,14 @@ describe('endpoints#clientSide', function() {
 
   beforeEach(function(done) {
     options = {branch: 'foo'};
-    server = new Hapi.Server();
-    server.connection({
-      port: 0,
-      labels: ['api']
-    });
+    server = new Hapi.Server(0, {labels:['api']});
+    
+    //for hapi 8
+
+    // server.connection({
+    //   port: 0,
+    //   labels: ['api']
+    // });
 
     server.start(done);
 
