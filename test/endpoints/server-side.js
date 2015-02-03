@@ -3,10 +3,6 @@ var endpoint = require('../../lib/endpoints'),
     resourceLoader = require('../../lib/api/resource-loader'),
     path = require('path');
 
-// var itz = it;
-
-// it = function () { return true; }
-
 describe('endpoints#serverSide', function() {
   var server,
       options,
