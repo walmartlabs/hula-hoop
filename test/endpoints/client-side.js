@@ -13,10 +13,10 @@ describe('endpoints#clientSide', function() {
     
     //for hapi 8
 
-    // server.connection({
-    //   port: 0,
-    //   labels: ['api']
-    // });
+    server.connection({
+      port: 0,
+      labels: ['api']
+    });
 
     server.start(done);
 
