@@ -222,8 +222,6 @@ describe('endpoints#serverSide', function() {
 
   it('should throw on server side queue timeout error', function(done) {
 
-    console.log(' ');
-
     this.stub(resourceLoader, 'asset', function(path) {
       return __dirname + '/../artifacts/server-side.js.test';
     });
