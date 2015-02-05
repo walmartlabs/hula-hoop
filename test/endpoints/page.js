@@ -9,7 +9,12 @@ describe('endpoints#page', function() {
       options;
 
   beforeEach(function(done) {
-    server = new Hapi.Server(0, {
+    server = new Hapi.Server(0, {labels:['api']});
+    
+    //for hapi 8
+
+    server.connection({
+      port: 0,
       labels: ['api']
     });
 
