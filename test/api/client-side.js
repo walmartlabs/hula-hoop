@@ -71,6 +71,15 @@ describe('client-side', function() {
         ]);
       });
     });
+
+    it('should handle no index file', function() {
+      resourceLoader.index.restore();
+      this.stub(resourceLoader, 'index', function() {});
+
+      expect(function() {
+        clientSide.loadHtml('app', undefined, function(err, data) {});
+      }).to.throw(/Unknown index/);
+    });
     it('should handle fs errors', function() {
       fs.readFile.restore();
       this.stub(fs, 'readFile', function(path, callback) {
