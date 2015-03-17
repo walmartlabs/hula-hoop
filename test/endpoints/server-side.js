@@ -221,9 +221,8 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should throw on server side queue timeout error', function(done) {
-
     this.stub(resourceLoader, 'asset', function(path) {
-      return __dirname + '/../artifacts/server-side.js.test';
+      return __dirname + '/../artifacts/server-side-timeout.js.test';
     });
 
     pageOptions.poolSize = 1;
@@ -249,12 +248,10 @@ describe('endpoints#serverSide', function() {
           errorCount++;
         }
 
-        if (counter >= 2) {
-          expect(serverCount).to.equal(1);
-          expect(errorCount).to.equal(1);
-          expect(logCount).to.equal(1);
-          done();
-        }
+        expect(serverCount).to.equal(0);
+        expect(errorCount).to.equal(1);
+        expect(logCount).to.equal(1);
+        done();
       } catch (err) {
         counter = -1;
         throw err;
