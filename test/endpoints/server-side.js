@@ -239,6 +239,11 @@ describe('endpoints#serverSide', function() {
       }
     });
     function complete(res) {
+      // One of the timeout calls just came back. Ignore
+      if (!done) {
+        return;
+      }
+
       try {
         counter++;
 
@@ -252,6 +257,7 @@ describe('endpoints#serverSide', function() {
         expect(errorCount).to.equal(1);
         expect(logCount).to.equal(1);
         done();
+        done = undefined;
       } catch (err) {
         counter = -1;
         throw err;
