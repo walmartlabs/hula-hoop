@@ -162,7 +162,7 @@ describe('client-side', function() {
 
     it('should embed scripts and sheets', function() {
       content = [{embed: 'link'}, {text: 'foo'}, {embed: 'config'}, {embed: 'script'}, {text: 'bar'}];
-      clientSide.inline('app', 'phoenixConfig', {foo: 'z'}, {js: [{href: 'bar', attr: 'attr2'}], css: [{href: 'baz', attr: 'attr1'}]}, function(err, data) {
+      clientSide.inline('app', 'phoenixConfig', {foo: 'z'}, {js: [{href: 'bar', attr: 'attr2'}], css: [{href: 'baz', attr: 'attr1'}]}, {}, function(err, data) {
         expect(err).to.not.exist;
 
         expect(data).to.equal('<link rel="stylesheet" href="baz" attr1>\nfoo<script type="text/javascript">phoenixConfig = {"foo":"z"};</script>\n<script type="text/javascript" src="bar" attr2></script>\nbar');
@@ -170,21 +170,21 @@ describe('client-side', function() {
     });
 
     it('should include phoenix config data', function() {
-      clientSide.inline('app', 'phoenixConfig', {foo: 'z'}, undefined, function(err, data) {
+      clientSide.inline('app', 'phoenixConfig', {foo: 'z'}, undefined, {}, function(err, data) {
         expect(err).to.not.exist;
 
         expect(data).to.equal('foo<script type="text/javascript">phoenixConfig = {"foo":"z"};</script>\nbar');
       });
     });
     it('should handle no data', function() {
-      clientSide.inline('app', undefined, undefined, undefined, function(err, data) {
+      clientSide.inline('app', undefined, undefined, undefined, {}, function(err, data) {
         expect(err).to.not.exist;
 
         expect(data).to.equal('foobar');
       });
     });
     it('should include branch', function() {
-      clientSide.inline('app', 'phoenixConfig', {branch: 'foo'}, undefined, function(err, data) {
+      clientSide.inline('app', 'phoenixConfig', {branch: 'foo'}, undefined, {}, function(err, data) {
         expect(err).to.not.exist;
 
         expect(data).to.equal('foo<script type="text/javascript">phoenixConfig = {"branch":"foo"};</script>\nbar');
@@ -193,7 +193,7 @@ describe('client-side', function() {
     });
     it('should handle missing variable name', function() {
       expect(function() {
-        clientSide.inline('app', undefined, {foo: 'z'}, undefined, function(err, data) {});
+        clientSide.inline('app', undefined, {foo: 'z'}, undefined, {}, function(err, data) {});
       }).to.throw(/Config var not specified/);
     });
     it('should handle load errors', function() {
@@ -201,7 +201,7 @@ describe('client-side', function() {
       this.stub(clientSide, 'loadHtml', function(app, branch, callback) {
         callback(new Error('bang'));
       });
-      clientSide.inline('app', 'phoenixConfig', {foo: 'z'}, undefined, function(err, data) {
+      clientSide.inline('app', 'phoenixConfig', {foo: 'z'}, undefined, {}, function(err, data) {
         expect(err).to.match(/bang/);
       });
     });

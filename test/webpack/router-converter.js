@@ -55,8 +55,8 @@ describe('webpack router-converter', function() {
     expect(json.hulahoop).to.eql({
       modules: {
         'hula-hoop_1': {
-          js: [{href: '/r/js.js', attr: 'data-circus-jsid="foo"'}],
-          css: [{href: '/r/css.css', attr: 'data-circus-cssid="foo"'}],
+          js: [{href: 'js.js', attr: 'data-circus-jsid="foo"'}],
+          css: [{href: 'css.css', attr: 'data-circus-cssid="foo"'}],
           serverRender: false
         }
       },

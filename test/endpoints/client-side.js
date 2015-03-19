@@ -59,7 +59,7 @@ describe('endpoints#clientSide', function() {
     });
   });
   it('should handle inline errors', function(done) {
-    this.stub(api.clientSide, 'inline', function(app, configVar, config, routeInfo, callback) {
+    this.stub(api.clientSide, 'inline', function(app, configVar, config, routeInfo, options, callback) {
       return callback(new Error('bang'));
     });
 
