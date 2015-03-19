@@ -142,6 +142,18 @@ Renders the index for a given `app` in a manner suitable for client side renderi
 - `finalize(req, response)`: Allows arbitrary modification of `response` prior to successful return. This can be used to attach state or custom headers to the response, etc.
 - `heartbeat`: Truthy to enable simplified success only response
 
+This will serve the index file that is associated with the app. Dependent resources for a particular route can be defined in the `js` and `css` fields on the route info object (See `api.resourceLoader.routeInfo`) and will be inserted wherever `<!-- hula-hoop: scripts -->` and `<!-- hula-hoop: links -->` comments are found in the index file.
+
+These comments can also implement a fail-over through `begin` and `end` pairs:
+
+```html
+<!-- hula-hoop: begin scripts -->
+<script src="failover"></script>
+<!-- hula-hoop: end scripts -->
+```
+
+Which will be removed when run within hula-hoop, allowing for other environments such as test environments to execute on the same index file.
+
 ### api.resourceLoader
 
 Maintains a versioned list of files and routes associated with the webapp.
