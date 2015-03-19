@@ -15,6 +15,12 @@ describe('webpack router-converter', function() {
     };
 
     compilation = {
+      options: {
+        output: {
+          publicPath: '/r/',
+          component: 'hula-hoop'
+        }
+      },
       plugin: function(name, callback) {
         expect(name).to.equal('circus-json');
         callback(json);
@@ -23,6 +29,127 @@ describe('webpack router-converter', function() {
   });
 
   it('should provide hula-hoop map structure', function() {
+    json = {
+      chunks: {
+        1: {js: 'js.js', css: 'css.css'}
+      },
+      chunkDependencies: {
+        'hula-hoop_1': {
+          js: [{href: 'js.js', id: 'foo'}],
+          css: [{href: 'css.css', id: 'foo'}]
+        }
+      },
+      modules: {
+        1: {
+          chunk: 1
+        }
+      },
+      routes: {
+        'foo': 1
+      }
+    };
+
+    var converter = new RouterConverter();
+    converter.apply(compiler);
+
+    expect(json.hulahoop).to.eql({
+      modules: {
+        'hula-hoop_1': {
+          js: [{href: '/r/js.js', attr: 'data-circus-jsid="foo"'}],
+          css: [{href: '/r/css.css', attr: 'data-circus-cssid="foo"'}],
+          serverRender: false
+        }
+      },
+      routes: {
+        '/foo': 'hula-hoop_1'
+      }
+    });
+  });
+
+  it('should handle published resources', function() {
+    json = {
+      chunks: {
+        1: {js: 'js.js', css: 'css.css'}
+      },
+      chunkDependencies: {
+        'hula-hoop_1': {
+          js: [{href: '//foo/js.js', id: 'foo'}],
+          css: [{href: '//bar/css.css', id: 'foo'}]
+        }
+      },
+      modules: {
+        1: {
+          chunk: 1
+        }
+      },
+      routes: {
+        'foo': 1
+      }
+    };
+
+    var converter = new RouterConverter();
+    converter.apply(compiler);
+
+    expect(json.hulahoop).to.eql({
+      modules: {
+        'hula-hoop_1': {
+          js: [{href: '//foo/js.js', attr: 'data-circus-jsid="foo"'}],
+          css: [{href: '//bar/css.css', attr: 'data-circus-cssid="foo"'}],
+          serverRender: false
+        }
+      },
+      routes: {
+        '/foo': 'hula-hoop_1'
+      }
+    });
+  });
+  it('should handle missing resources', function() {
+    compilation.options.output.publicPath = '';
+    json = {
+      chunks: {
+        1: {}
+      },
+      chunkDependencies: {
+        'hula-hoop_1': {
+          js: [{href: 'js.js', id: 'foo'}],
+          css: [{href: 'css.css', id: 'foo'}]
+        }
+      },
+      modules: {
+        1: {
+          chunk: 1
+        }
+      },
+      routes: {
+        'foo': 1
+      }
+    };
+
+    var converter = new RouterConverter();
+    converter.apply(compiler);
+
+    expect(json.hulahoop).to.eql({
+      modules: {
+        'hula-hoop_1': {
+          js: [{href: 'js.js', attr: 'data-circus-jsid="foo"'}],
+          css: [{href: 'css.css', attr: 'data-circus-cssid="foo"'}],
+          serverRender: false
+        }
+      },
+      routes: {
+        '/foo': 'hula-hoop_1'
+      }
+    });
+  });
+  it('should ignore projects without routes', function() {
+    var converter = new RouterConverter();
+    converter.apply(compiler);
+
+    expect(json).to.eql({
+    });
+  });
+
+  it('should error when missing chunkDependencies', function() {
     json = {
       chunks: {
         1: {js: 'js.js', css: 'css.css'}
@@ -37,50 +164,9 @@ describe('webpack router-converter', function() {
       }
     };
 
-    var converter = new RouterConverter();
-    converter.apply(compiler);
-
-    expect(json.hulahoop).to.eql({
-      modules: {
-        1: {js: ['js.js'], css: ['css.css'], serverRender: false}
-      },
-      routes: {
-        '/foo': 1
-      }
-    });
-  });
-  it('should handle missing resources', function() {
-    json = {
-      chunks: {
-        1: {}
-      },
-      modules: {
-        1: {
-          chunk: 1
-        }
-      },
-      routes: {
-        'foo': 1
-      }
-    };
-
-    var converter = new RouterConverter();
-    converter.apply(compiler);
-
-    expect(json.hulahoop).to.eql({
-      modules: {
-        1: {serverRender: false}
-      },
-      routes: {
-        '/foo': 1
-      }
-    });
-  });
-  it('should ignore projects without routes', function() {
-    var converter = new RouterConverter();
-    converter.apply(compiler);
-
-    expect(json).to.eql({
-    });
+    expect(function() {
+      var converter = new RouterConverter();
+      converter.apply(compiler);
+    }).to.throw(/Must be run in conjunction with the chunk dependencies plugin/);
   });
 });

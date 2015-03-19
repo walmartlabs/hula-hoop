@@ -116,10 +116,10 @@ describe('resource-loader', function() {
           return JSON.stringify({
             "hulahoop": {
               "modules": [
-                {"js": ["bundle.js"], "css": ["0.bundle.css"], "serverRender": true},
-                {"js": ["1.bundle.js"], "css": ["1.bundle.css"], "serverRender": true},
-                {"js": ["2.bundle.js"]},
-                {"css": ["3.bundle.css"], "serverRender": true}
+                {"js": [{href: "bundle.js"}], "css": [{href: "0.bundle.css"}], "serverRender": true},
+                {"js": [{href: "1.bundle.js"}], "css": [{href: "1.bundle.css"}], "serverRender": true},
+                {"js": [{href: "2.bundle.js"}]},
+                {"css": [{href: "3.bundle.css"}], "serverRender": true}
               ],
               "routes": {
                 "/": 1,
@@ -133,6 +133,9 @@ describe('resource-loader', function() {
               {"js": "2.bundle.js"},
               {"css": "3.bundle.css"}
             ],
+            "published": {
+              "2.bundle.js": "it worked!"
+            },
             "modules": {
               "0": {
                 "chunk": 0,
@@ -273,15 +276,15 @@ describe('resource-loader', function() {
         ]);
 
         expect(resourceLoader.routeInfo(undefined, '/')).to.eql({
-          js: ['1.bundle.js'],
-          css: ['1.bundle.css'],
+          js: [{href: '1.bundle.js'}],
+          css: [{href: '1.bundle.css'}],
           serverRender: true
         });
         expect(resourceLoader.routeInfo(undefined, '/foo/{path*}')).to.eql({
-          js: ['2.bundle.js']
+          js: [{href: 'it worked!'}]
         });
         expect(resourceLoader.routeInfo(undefined, '/hai')).to.eql({
-          css: ['3.bundle.css'],
+          css: [{href: '3.bundle.css'}],
           serverRender: true
         });
       });
