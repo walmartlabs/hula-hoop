@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.1.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.1.1...master)
+
+## v1.1.1 - March 19th, 2015
+- Fix failing tests missed in last commit - 9c20dc9
+- Add resourceRoot mapping to cjs response resources - df9f720
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.1.0...v1.1.1)
 
 ## v1.1.0 - March 18th, 2015
 - [#15](https://github.com/walmartlabs/hula-hoop/pull/15) - Improve resource embedding in CJS responses ([@kpdecker](https://api.github.com/users/kpdecker))
