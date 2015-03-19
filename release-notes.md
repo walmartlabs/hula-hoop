@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.0.0...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.1.0...master)
+
+## v1.1.0 - March 18th, 2015
+- [#15](https://github.com/walmartlabs/hula-hoop/pull/15) - Improve resource embedding in CJS responses ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#12](https://github.com/walmartlabs/hula-hoop/pull/12) - Hapi 8 migration ([@nvcexploder](https://api.github.com/users/nvcexploder))
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.0.0...v1.1.0)
 
 ## v1.0.0 - December 15th, 2014
 - [#9](https://github.com/walmartlabs/hula-hoop/issues/9) - Add support for circus.json route lists ([@kpdecker](https://api.github.com/users/kpdecker))
