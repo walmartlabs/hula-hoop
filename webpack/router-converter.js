@@ -28,10 +28,10 @@ exports.prototype.apply = function(compiler) {
 
           remapped.modules[componentName + '_' + id] = {
             js: _.map(dependencies.js, function(dependency) {
-              return {href: mapFile(dependency.href, compilation), attr: 'data-circus-jsid="' + dependency.id + '"'};
+              return {href: dependency.href, attr: 'data-circus-jsid="' + dependency.id + '"'};
             }),
             css: _.map(dependencies.css, function(dependency) {
-              return {href: mapFile(dependency.href, compilation), attr: 'data-circus-cssid="' + dependency.id + '"'};
+              return {href: dependency.href, attr: 'data-circus-cssid="' + dependency.id + '"'};
             }),
 
             serverRender: !!json.serverRender
@@ -43,11 +43,3 @@ exports.prototype.apply = function(compiler) {
     });
   });
 };
-
-function mapFile(href, compilation) {
-  if (!/\/\//.test(href) && !/^\//.test(href)) {
-    return (compilation.options.output.publicPath || '') + href;
-  } else {
-    return href;
-  }
-}
