@@ -2,7 +2,12 @@
 
 ## Development
 
-[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.1.1...master)
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.2.0...master)
+
+## v1.2.0 - April 15th, 2015
+- Handle root parameter from loader - 2b6c026
+
+[Commits](https://github.com/walmartlabs/hula-hoop/compare/v1.1.1...v1.2.0)
 
 ## v1.1.1 - March 19th, 2015
 - Fix failing tests missed in last commit - 9c20dc9
