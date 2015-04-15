@@ -21,6 +21,7 @@ describe('webpack router-converter', function() {
           component: 'hula-hoop'
         }
       },
+      chunks: [],
       plugin: function(name, callback) {
         expect(name).to.equal('circus-json');
         callback(json);
@@ -100,6 +101,70 @@ describe('webpack router-converter', function() {
       },
       routes: {
         '/foo': 'hula-hoop_1'
+      }
+    });
+  });
+  it('should handle published resources', function() {
+    json = {
+      chunks: {
+        1: {js: 'js.js', css: 'css.css'}
+      },
+      chunkDependencies: {
+        'hula-hoop_1': {
+          js: [{href: '//foo/js.js', id: 'foo'}],
+          css: [{href: '//bar/css.css', id: 'foo'}]
+        }
+      },
+      modules: {
+        1: {
+          chunk: 1
+        }
+      },
+      routes: {
+        'foo': 1
+      }
+    };
+
+    compilation.chunks = [{
+      modules: [{
+        dependencies: [
+          {
+            Class: {name: 'RequireRouterListing' },
+            data: {
+              type: 'ObjectExpression',
+              properties: [
+                {key: {name: 'root'}, value: {value: '/bar/'}},
+              ]
+            }
+          },
+          {
+            Class: {name: 'RequireRouterListing' },
+            data: {
+              type: 'ObjectExpression',
+              properties: []
+            }
+          },
+          {
+            Class: {name: 'RequireRouterListing' }
+          }
+        ]
+      }
+      ]
+    }];
+
+    var converter = new RouterConverter();
+    converter.apply(compiler);
+
+    expect(json.hulahoop).to.eql({
+      modules: {
+        'hula-hoop_1': {
+          js: [{href: '//foo/js.js', attr: 'data-circus-jsid="foo"'}],
+          css: [{href: '//bar/css.css', attr: 'data-circus-cssid="foo"'}],
+          serverRender: false
+        }
+      },
+      routes: {
+        '/bar/foo': 'hula-hoop_1'
       }
     });
   });
