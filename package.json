@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "chai": "1.x.x",
+    "eslint": "^0.19.0",
     "hapi": "8.x.x",
     "istanbul": "0.2.x",
     "mocha": "1.x.x",
