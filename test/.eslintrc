@@ -1,0 +1,10 @@
+{
+  "globals": {
+    "expect": true
+  },
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+  }
+}

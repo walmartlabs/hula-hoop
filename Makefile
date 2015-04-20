@@ -1,9 +1,13 @@
 test:
+	@$(MAKE) lint
 	@#lib-cov
 	@NODE_ENV=test ./node_modules/.bin/mocha --recursive --timeout 3000
 	@#$(MAKE) rm-lib-cov
 
 tests: test
+
+lint:
+	node_modules/.bin/eslint lib/ tasks/ test/ webpack/
 
 lib-cov: rm-lib-cov
 	@jscoverage lib lib-cov
@@ -30,6 +34,7 @@ unit:
 
 # Test coverage with Istanbul
 ist:
+	@$(MAKE) lint
 	@NODE_ENV=test node_modules/.bin/istanbul cover -- node_modules/.bin/_mocha --recursive
 
 .PHONY: test tap test-cov test-cov-html unit lib-cov rm-lib-cov ist
