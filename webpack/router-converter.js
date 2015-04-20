@@ -30,8 +30,7 @@ exports.prototype.apply = function(compiler) {
           throw new Error('Must be run in conjunction with the chunk dependencies plugin');
         }
 
-        var componentName = compilation.options.output.component,
-            components = compilation.options.components;
+        var componentName = compilation.options.output.component;
         var remapped = {
           routes: {},
           modules: {}

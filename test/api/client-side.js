@@ -96,7 +96,7 @@ describe('client-side', function() {
     });
     it('should throw on nested embeds', function() {
       content = 'foo<!-- hula-hoop: begin scripts --><script></script><script></script><!-- hula-hoop: links --><!-- hula-hoop: end scripts -->bar';
-      clientSide.loadHtml('app', undefined, function(err, data) {
+      clientSide.loadHtml('app', undefined, function(err) {
         expect(err).to.match(/Nested embed found: hula-hoop: links/);
       });
     });
@@ -137,7 +137,7 @@ describe('client-side', function() {
       this.stub(resourceLoader, 'index', function() {});
 
       expect(function() {
-        clientSide.loadHtml('app', undefined, function(err, data) {});
+        clientSide.loadHtml('app', undefined, function() {});
       }).to.throw(/Unknown index/);
     });
     it('should handle fs errors', function() {
@@ -145,7 +145,7 @@ describe('client-side', function() {
       this.stub(fs, 'readFile', function(path, callback) {
         callback(new Error('bang'));
       });
-      clientSide.loadHtml('app', undefined, function(err, data) {
+      clientSide.loadHtml('app', undefined, function(err) {
         expect(err).to.match(/bang/);
       });
     });
@@ -193,7 +193,7 @@ describe('client-side', function() {
     });
     it('should handle missing variable name', function() {
       expect(function() {
-        clientSide.inline('app', undefined, {foo: 'z'}, undefined, {}, function(err, data) {});
+        clientSide.inline('app', undefined, {foo: 'z'}, undefined, {}, function() {});
       }).to.throw(/Config var not specified/);
     });
     it('should handle load errors', function() {
@@ -201,7 +201,7 @@ describe('client-side', function() {
       this.stub(clientSide, 'loadHtml', function(app, branch, callback) {
         callback(new Error('bang'));
       });
-      clientSide.inline('app', 'phoenixConfig', {foo: 'z'}, undefined, {}, function(err, data) {
+      clientSide.inline('app', 'phoenixConfig', {foo: 'z'}, undefined, {}, function(err) {
         expect(err).to.match(/bang/);
       });
     });

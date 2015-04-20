@@ -133,7 +133,7 @@ describe('webpack router-converter', function() {
             data: {
               type: 'ObjectExpression',
               properties: [
-                {key: {name: 'root'}, value: {value: '/bar/'}},
+                {key: {name: 'root'}, value: {value: '/bar/'}}
               ]
             }
           },

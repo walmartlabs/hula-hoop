@@ -9,9 +9,9 @@ describe('endpoints#clientSide', function() {
 
   beforeEach(function(done) {
     options = {branch: 'foo'};
-    server = new Hapi.Server(0, {labels:['api']});
-    
-    //for hapi 8
+    server = new Hapi.Server(0, {labels: ['api']});
+
+    // for hapi 8
 
     server.connection({
       port: 0,
@@ -24,7 +24,7 @@ describe('endpoints#clientSide', function() {
     server.route({path: '/', method: 'GET', config: {
       handler: endpoint.clientSide('app', {
         configVar: 'foo',
-        userConfig: function(req) {
+        userConfig: function() {
           return options;
         },
         finalize: function(req, response) {

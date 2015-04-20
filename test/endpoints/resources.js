@@ -7,9 +7,9 @@ describe('endpoints - resources', function() {
   var server;
 
   beforeEach(function(done) {
-    server = new Hapi.Server(0, {labels:['api']});
-    
-    //for hapi 8
+    server = new Hapi.Server(0, {labels: ['api']});
+
+    // for hapi 8
 
     server.connection({
       port: 0,
@@ -31,7 +31,7 @@ describe('endpoints - resources', function() {
       });
 
       it('should return gibberish when no path is found', function(done) {
-        this.stub(resourceLoader, 'assetContainer', function(path) {
+        this.stub(resourceLoader, 'assetContainer', function() {
           return '';
         });
         var req = { params: { path: '/directory' } };
@@ -43,7 +43,7 @@ describe('endpoints - resources', function() {
 
   describe('#index', function() {
     it('should return the requested path', function(done) {
-      this.stub(resourceLoader, 'assetContainer', function(path) {
+      this.stub(resourceLoader, 'assetContainer', function() {
         return 'test/artifacts';
       });
       server.route({ path: '/r/phoenix/{platform}/index.html', method: 'GET', handler: endpoint.index() });
@@ -55,7 +55,7 @@ describe('endpoints - resources', function() {
     });
 
     it('should handle unknown paths', function(done) {
-      this.stub(resourceLoader, 'assetContainer', function(path) {
+      this.stub(resourceLoader, 'assetContainer', function() {
         return '';
       });
       server.route({ path: '/r/phoenix/{platform}/index.html', method: 'GET', handler: endpoint.index() });

@@ -1,7 +1,6 @@
 var endpoint = require('../../lib/endpoints'),
     Hapi = require('hapi'),
-    resourceLoader = require('../../lib/api/resource-loader'),
-    path = require('path');
+    resourceLoader = require('../../lib/api/resource-loader');
 
 describe('endpoints#page', function() {
   var server,
@@ -9,9 +8,9 @@ describe('endpoints#page', function() {
       options;
 
   beforeEach(function(done) {
-    server = new Hapi.Server(0, {labels:['api']});
-    
-    //for hapi 8
+    server = new Hapi.Server(0, {labels: ['api']});
+
+    // for hapi 8
 
     server.connection({
       port: 0,
@@ -26,7 +25,7 @@ describe('endpoints#page', function() {
       poolSize: 5,
       host: 'localhost:' + server.info.port,
       configVar: 'phoenixShared',
-      userConfig: function(req) {
+      userConfig: function() {
         return options;
       }
     };
@@ -46,7 +45,7 @@ describe('endpoints#page', function() {
   });
 
   it('should run finalize', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
@@ -81,7 +80,7 @@ describe('endpoints#page', function() {
         css: ['1234/base@2x.css', '1234/foo@2x.css']
       };
     });
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
@@ -101,7 +100,7 @@ describe('endpoints#page', function() {
   });
 
   it('should route to server side with serverRoute config', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
@@ -123,7 +122,7 @@ describe('endpoints#page', function() {
     });
   });
   it('should route to index with serverRoute config disabled', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
@@ -152,7 +151,7 @@ describe('endpoints#page', function() {
     });
   });
   it('should route to index with serverRoute all disabled', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
@@ -172,7 +171,7 @@ describe('endpoints#page', function() {
     });
   });
   it('should log and output the default index file on server side throw', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-error.js.test';
     });
 
@@ -190,7 +189,7 @@ describe('endpoints#page', function() {
     });
   });
   it('should log and output the default index file on 500 error', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-500.js.test';
     });
 
@@ -209,7 +208,7 @@ describe('endpoints#page', function() {
   });
 
   it('should log and output the default index file on server side on navigate error', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-loadUrl-error.js.test';
     });
 

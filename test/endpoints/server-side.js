@@ -1,7 +1,6 @@
 var endpoint = require('../../lib/endpoints'),
     Hapi = require('hapi'),
-    resourceLoader = require('../../lib/api/resource-loader'),
-    path = require('path');
+    resourceLoader = require('../../lib/api/resource-loader');
 
 describe('endpoints#serverSide', function() {
   var server,
@@ -20,9 +19,9 @@ describe('endpoints#serverSide', function() {
           .header('cache-control', 'max-age=-50');
     });
 
-    server = new Hapi.Server(0, {labels:['api']});
-    
-    //for hapi 8
+    server = new Hapi.Server(0, {labels: ['api']});
+
+    // for hapi 8
 
     server.connection({
       port: 0,
@@ -35,7 +34,7 @@ describe('endpoints#serverSide', function() {
       handler: caching,
       config: {
         cache: {
-          expiresIn: 15*60*1000
+          expiresIn: 15 * 60 * 1000
         }
       }
     });
@@ -56,7 +55,7 @@ describe('endpoints#serverSide', function() {
       handler: caching,
       config: {
         cache: {
-          expiresIn: 15*60*1000,
+          expiresIn: 15 * 60 * 1000,
           privacy: 'private'
         }
       }
@@ -85,7 +84,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should route to server side', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
@@ -103,7 +102,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should trigger cleanup', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-cleanup.js.test';
     });
 
@@ -135,7 +134,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should route to server side with serverRoute config', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
@@ -157,7 +156,7 @@ describe('endpoints#serverSide', function() {
     });
   });
   it('should throw on server side error', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-error.js.test';
     });
 
@@ -176,7 +175,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should throw on server side queue full error', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
 
@@ -221,7 +220,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should throw on server side queue timeout error', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-timeout.js.test';
     });
 
@@ -269,7 +268,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should throw on server side on navigate error', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-loadUrl-error.js.test';
     });
 
@@ -297,7 +296,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should cache ajax requests', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-caching.js.test';
     });
 
@@ -332,7 +331,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should private cache ajax requests', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-private-caching.js.test';
     });
     pageOptions.ajax.cache = server.cache({segment: 'fruit-loops'});
@@ -366,7 +365,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should not cache no-cache ajax requests', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-no-caching.js.test';
     });
     pageOptions.ajax.cache = server.cache({segment: 'fruit-loops'});
@@ -400,7 +399,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should not cache expired cache ajax requests', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-expired-caching.js.test';
     });
     pageOptions.ajax.cache = server.cache({segment: 'fruit-loops'});
@@ -434,7 +433,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should timeout ajax requests', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-timeout.js.test';
     });
     pageOptions.ajax.cache = server.cache({segment: 'fruit-loops'});
@@ -467,7 +466,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should redirect properly', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side-redirect.js.test';
     });
     pageOptions.ajax.cache = server.cache({segment: 'fruit-loops'});
@@ -486,7 +485,7 @@ describe('endpoints#serverSide', function() {
   });
 
   it('should be max cached without ajax requests', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
@@ -495,23 +494,23 @@ describe('endpoints#serverSide', function() {
       url: '/foo/bar/bat',
       payload: ''
     }, function(res) {
-      expect(res.headers['cache-control']).to.equal('max-age=' + (24*60*60) + ', must-revalidate');
+      expect(res.headers['cache-control']).to.equal('max-age=' + (24 * 60 * 60) + ', must-revalidate');
       done();
     });
   });
 
   it('should be max cached without ajax requests', function(done) {
-    this.stub(resourceLoader, 'asset', function(path) {
+    this.stub(resourceLoader, 'asset', function() {
       return __dirname + '/../artifacts/server-side.js.test';
     });
-    pageOptions.maxServerExpires = 1*60*60;
+    pageOptions.maxServerExpires = 1 * 60 * 60;
     server.route({path: '/foo/{path*}', method: 'GET', config: {handler: endpoint.serverSide('app', pageOptions)} });
     server.inject({
       method: 'get',
       url: '/foo/bar/bat',
       payload: ''
     }, function(res) {
-      expect(res.headers['cache-control']).to.equal('max-age=' + (1*60*60) + ', must-revalidate');
+      expect(res.headers['cache-control']).to.equal('max-age=' + (1 * 60 * 60) + ', must-revalidate');
       done();
     });
   });

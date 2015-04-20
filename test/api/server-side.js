@@ -191,7 +191,7 @@ describe('serverSide handler', function() {
     var options = {
       poolSize: 5,
       host: 'foo.com',
-      cleanup: function(page) {
+      cleanup: function() {
         expect(resourceLoader.asset).to.have.been.calledWith('foo-server.js');
 
         expect(complete).to.be.true;
@@ -212,7 +212,7 @@ describe('serverSide handler', function() {
       log: this.spy()
     };
 
-    handler(req, function(err, response) {
+    handler(req, function() {
       complete = true;
     });
   });
@@ -242,7 +242,7 @@ describe('serverSide handler', function() {
       log: this.spy()
     };
 
-    handler(req, function(err, response) {
+    handler(req, function() {
       expect(isBeforeNavigateCalled).to.be.true;
       done();
     });

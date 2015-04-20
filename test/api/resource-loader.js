@@ -1,10 +1,11 @@
 var fs = require('fs'),
-    path = require('path'),
     resourceLoader = require('../../lib/api/resource-loader');
 
 describe('resource-loader', function() {
   beforeEach(function() {
     this.stub(fs, 'readdirSync', function(name) {
+      var err;
+
       if (/bazbaz$/.test(name)) {
         return [
           'baz',
@@ -30,11 +31,11 @@ describe('resource-loader', function() {
           'baz'
         ];
       } else if (/io-error$/.test(name)) {
-        var err = new Error();
+        err = new Error();
         err.code = 'FAIL';
         throw err;
       } else {
-        var err = new Error();
+        err = new Error();
         err.code = 'ENOTDIR';
         throw err;
       }
@@ -114,74 +115,74 @@ describe('resource-loader', function() {
           ]);
         } else if (/\/circus.json$/.test(name)) {
           return JSON.stringify({
-            "hulahoop": {
-              "modules": [
-                {"js": [{href: "bundle.js"}], "css": [{href: "0.bundle.css"}], "serverRender": true},
-                {"js": [{href: "1.bundle.js"}], "css": [{href: "1.bundle.css"}], "serverRender": true},
-                {"js": [{href: "2.bundle.js"}]},
-                {"css": [{href: "3.bundle.css"}], "serverRender": true}
+            hulahoop: {
+              'modules': [
+                {'js': [{href: 'bundle.js'}], 'css': [{href: '0.bundle.css'}], 'serverRender': true},
+                {'js': [{href: '1.bundle.js'}], 'css': [{href: '1.bundle.css'}], 'serverRender': true},
+                {'js': [{href: '2.bundle.js'}]},
+                {'css': [{href: '3.bundle.css'}], 'serverRender': true}
               ],
-              "routes": {
-                "/": 1,
-                "/foo/{path*}": 2,
-                "/hai": 3
+              'routes': {
+                '/': 1,
+                '/foo/{path*}': 2,
+                '/hai': 3
               }
             },
-            "chunks": [
-              {"js": "bundle.js", "css": "0.bundle.css"},
-              {"js": "1.bundle.js", "css": "1.bundle.css"},
-              {"js": "2.bundle.js"},
-              {"css": "3.bundle.css"}
+            'chunks': [
+              {'js': 'bundle.js', 'css': '0.bundle.css'},
+              {'js': '1.bundle.js', 'css': '1.bundle.css'},
+              {'js': '2.bundle.js'},
+              {'css': '3.bundle.css'}
             ],
-            "published": {
-              "2.bundle.js": "it worked!"
+            'published': {
+              '2.bundle.js': 'it worked!'
             },
-            "modules": {
-              "0": {
-                "chunk": 0,
-                "name": "oh-hai/src/client/index"
+            'modules': {
+              '0': {
+                'chunk': 0,
+                'name': 'oh-hai/src/client/index'
               },
-              "1": {
-                "chunk": 1,
-                "name": "oh-hai/src/client/hai"
+              '1': {
+                'chunk': 1,
+                'name': 'oh-hai/src/client/hai'
               },
-              "2": {
-                "chunk": 2,
-                "name": "oh-hai/src/client/views/hai"
+              '2': {
+                'chunk': 2,
+                'name': 'oh-hai/src/client/views/hai'
               },
-              "3": {
-                "chunk": 3,
-                "name": "oh-hai/src/client/views/hai.handlebars"
+              '3': {
+                'chunk': 3,
+                'name': 'oh-hai/src/client/views/hai.handlebars'
               }
             },
-            "files": [
-              "oh-hai.js",
-              "oh-hai.js.map",
-              "1.oh-hai.js",
-              "1.oh-hai.js.map"
+            'files': [
+              'oh-hai.js',
+              'oh-hai.js.map',
+              '1.oh-hai.js',
+              '1.oh-hai.js.map'
             ],
-            "entry": "oh-hai.js",
-            "serverRender": true
+            'entry': 'oh-hai.js',
+            'serverRender': true
           });
         } else {
           return JSON.stringify({
-            "modules": {
-              "documents": {
-                "js": ["base.js", "documents.js"],
-                "css": ["base@2x.css"]
+            'modules': {
+              'documents': {
+                'js': ['base.js', 'documents.js'],
+                'css': ['base@2x.css']
               },
-              "home": {
-                "js": ["base.js", "home.js"],
-                "css": ["base@2x.css", "home@2x.css"],
-                "serverRender": true
+              'home': {
+                'js': ['base.js', 'home.js'],
+                'css': ['base@2x.css', 'home@2x.css'],
+                'serverRender': true
               }
             },
-            "routes": {
-              "/foo": "documents",
-              "/foo/{path*}": "home",
-              "/home": "home"
+            'routes': {
+              '/foo': 'documents',
+              '/foo/{path*}': 'home',
+              '/home': 'home'
             },
-            "loadPrefix": "prefix!"
+            'loadPrefix': 'prefix!'
           });
         }
       });

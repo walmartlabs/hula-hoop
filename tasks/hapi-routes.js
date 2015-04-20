@@ -9,8 +9,7 @@ module.exports = function(grunt) {
 
     var config = this.options({config: './lumbar.json'}),
         lumbarFile = config.config,
-        outputFile = config.dest,
-        nodeModules = __dirname + '/../node_modules/';
+        outputFile = config.dest;
 
     var options = _.omit(config, 'config', 'dest', 'package'),
         lumbar = Lumbar.init(lumbarFile, options);
@@ -27,7 +26,7 @@ module.exports = function(grunt) {
       };
 
       // Extract any maps that are embedded in the response
-      function processMap(map, package, platform) {
+      function processMap(map, package) {
         if (map.isMap) {
           ret.loadPrefix = ret.loadPrefix || map.loadPrefix;
 
@@ -37,8 +36,7 @@ module.exports = function(grunt) {
 
           // Record the route -> module mapping
           _.each(map.routes, function(moduleName, route) {
-            var module = ret.modules[moduleName],
-                hapiRoute = remapRoute(route);
+            var hapiRoute = remapRoute(route);
             ret.routes[hapiRoute] = moduleName;
             ret.modules[moduleName].routes[hapiRoute] = map.modules[moduleName].routes[route];
           });
@@ -89,7 +87,8 @@ function resolveModule(ret, map, moduleName) {
   hapiModule.js = _.compact(_.union(hapiModule.js, module.js));
   hapiModule.css = _.compact(_.union(hapiModule.css, selectCSS(module)));
 
-  return ret.modules[moduleName] = hapiModule;
+  ret.modules[moduleName] = hapiModule;
+  return hapiModule;
 }
 
 // Selects the "best option" CSS file. Of there are multiple css source files this will
