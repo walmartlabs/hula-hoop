@@ -1,6 +1,7 @@
 var endpoint = require('../../lib/endpoints'),
     Hapi = require('hapi'),
-    resourceLoader = require('../../lib/api/resource-loader');
+    resourceLoader = require('../../lib/api/resource-loader'),
+    clientSide = require('../../lib/api/client-side');
 
 describe('endpoints#page', function() {
   var server,
@@ -8,6 +9,8 @@ describe('endpoints#page', function() {
       options;
 
   beforeEach(function(done) {
+    clientSide.reset();
+
     server = new Hapi.Server(0, {labels: ['api']});
 
     // for hapi 8
@@ -183,7 +186,7 @@ describe('endpoints#page', function() {
     }, function(res) {
       expect(res.payload).to.not.match(/\$serverCache/);
       expect(res.payload).to.not.match(/<div id="output">(\nit ran){3}/);
-      expect(res.payload).to.match(/module.exports = require\(/);
+      expect(res.payload).to.match(/<div id="output"><\/div>/);
 
       done();
     });
@@ -201,7 +204,7 @@ describe('endpoints#page', function() {
     }, function(res) {
       expect(res.payload).to.not.match(/\$serverCache/);
       expect(res.payload).to.not.match(/<div id="output">(\nit ran){3}/);
-      expect(res.payload).to.match(/module.exports = require\(/);
+      expect(res.payload).to.match(/<div id="output"><\/div>/);
 
       done();
     });
@@ -219,7 +222,7 @@ describe('endpoints#page', function() {
       payload: ''
     }, function(res) {
       expect(res.payload).to.match(/\$serverCache/);
-      expect(res.payload).to.not.match(/module.exports = require\(/);
+      expect(res.payload).to.not.match(/<div id="output"><\/div>/);
 
       setTimeout(function() {
         server.inject({
@@ -227,7 +230,7 @@ describe('endpoints#page', function() {
           url: '/foo/bar/bat',
           payload: ''
         }, function(res) {
-          expect(res.payload).to.match(/module.exports = require\(/);
+          expect(res.payload).to.match(/<div id="output"><\/div>/);
 
           setTimeout(done, 15);
         });

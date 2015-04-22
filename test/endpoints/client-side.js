@@ -36,6 +36,9 @@ describe('endpoints#clientSide', function() {
       handler: endpoint.clientSide('app', {heartbeat: true})
     } });
   });
+  afterEach(function() {
+    api.clientSide.reset();
+  });
 
   it('should render client content', function(done) {
     server.inject({
